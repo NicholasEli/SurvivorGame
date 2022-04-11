@@ -146,6 +146,7 @@ table {
   cursor: pointer;
   border: 2px solid #4378a6;
   border-radius: 100%;
+  pointer-events: none;
 }
 #play-btn svg,
 #pause-btn svg {
@@ -161,6 +162,7 @@ table {
 #play-btn.active,
 #pause-btn.active {
   display: flex;
+  pointer-events: all;
 }
 
 canvas {

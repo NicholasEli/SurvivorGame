@@ -9,7 +9,12 @@ export default class Canvas {
 	}
 
 	init() {
-		this.el = document.getElementById('canvas');
+		const canvas = document.createElement('canvas');
+		canvas.width = this.width;
+		canvas.height = this.height;
+		document.body.append(canvas);
+
+		this.el = canvas;
 		this.ctx = this.el.getContext('2d');
 
 		const bounds = this.el.getBoundingClientRect();
@@ -18,7 +23,10 @@ export default class Canvas {
 		this.y = bounds.y;
 		this.x = bounds.x;
 
-		return this.ctx;
+		return {
+			element: this.canvas,
+			context: this.ctx,
+		};
 	}
 
 	get getDimensions() {

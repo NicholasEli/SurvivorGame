@@ -11,6 +11,7 @@
 	cursor: pointer;
 	border: 2px solid $light-blue;
 	border-radius: 100%;
+	pointer-events: none;
 
 	svg {
 		width: 40px;
@@ -25,5 +26,6 @@
 
 	&.active {
 		display: flex;
+		pointer-events: all;
 	}
 }

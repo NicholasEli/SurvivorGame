@@ -6,10 +6,11 @@ window.onload = function () {
 	console.log('--Server Running');
 
 	const settings = new Settings();
+	settings.init();
 
 	const canvas = new Canvas();
-	const ctx = canvas.init();
+	const canvasProps = canvas.init();
 
-	const survivor = new Survivor(ctx, 10, 10);
+	const survivor = new Survivor(canvasProps.context, 10, 10);
 	survivor.init();
 };
