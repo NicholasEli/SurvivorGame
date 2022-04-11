@@ -1,5 +1,8 @@
 @import '_reset.scss';
 @import '_variables.scss';
+@import '_assets.scss';
+@import '_settings.scss';
+@import '_canvas.scss';
 
 body {
 	width: 100vw;
@@ -10,13 +13,4 @@ body {
 	overflow-x: hidden;
 	background-image: url('../assets/background.jpeg');
 	background-size: cover;
-
-	canvas {
-		background-image: url('../assets/cement-floor.jpeg');
-		background-size: contain;
-	}
-
-	#survivor {
-		display: none;
-	}
 }
