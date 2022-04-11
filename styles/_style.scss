@@ -1,0 +1,22 @@
+@import '_reset.scss';
+@import '_variables.scss';
+
+body {
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	overflow-x: hidden;
+	background-image: url('../assets/background.jpeg');
+	background-size: cover;
+
+	canvas {
+		background-image: url('../assets/cement-floor.jpeg');
+		background-size: contain;
+	}
+
+	#survivor {
+		display: none;
+	}
+}
