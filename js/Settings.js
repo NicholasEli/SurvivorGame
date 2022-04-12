@@ -15,7 +15,7 @@ const pauseBtnMarkup = `
 			</svg>`;
 
 export default class Settings {
-	constructor(canvas = null, planning = false) {
+	constructor(canvas = null, planning = true) {
 		this.canvas = canvas;
 		this.planning = planning;
 	}
