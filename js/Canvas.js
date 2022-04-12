@@ -8,6 +8,10 @@ export default class Canvas {
 		this.x = null;
 	}
 
+	clear() {
+		this.ctx.clearRect(0, 0, this.width, this.height);
+	}
+
 	init() {
 		const canvas = document.createElement('canvas');
 		canvas.width = this.width;

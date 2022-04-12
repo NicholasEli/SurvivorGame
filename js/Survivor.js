@@ -10,6 +10,7 @@ export default class Survivor {
 		this.height = 75;
 		this.health = 100;
 		this.sprite = 'idle-0';
+		this.routeNodes = [];
 	}
 
 	calcWidthHeight(sprite) {
@@ -36,6 +37,26 @@ export default class Survivor {
 		let canvasBounds = null;
 		let clientCoords = null;
 
+		const _drawPath = () => {
+			console.clear();
+			this.canvas.ctx.moveTo(routeNodes[0].x, routeNodes[0].y);
+			routeNodes.forEach((node, index) => {
+				if (!routeNodes[index] || !routeNodes[index + 1]) return;
+				const xc = (routeNodes[index].x + routeNodes[index + 1].x) / 2;
+				const yc = (routeNodes[index].y + routeNodes[index + 1].y) / 2;
+				this.canvas.ctx.quadraticCurveTo(routeNodes[index].x, routeNodes[index].y, xc, yc);
+			});
+			const i = routeNodes.length - 2;
+			this.canvas.ctx.quadraticCurveTo(
+				routeNodes[i].x,
+				routeNodes[i].y,
+				routeNodes[i + 1].x,
+				routeNodes[i + 1].y
+			);
+			this.canvas.ctx.lineWidth = 3;
+			this.canvas.ctx.stroke();
+		};
+
 		this.canvas.el.onmousedown = (e) => {
 			canvasBounds = this.canvas.el.getBoundingClientRect();
 			clientCoords = { x: e.clientX - canvasBounds.x, y: e.clientY - canvasBounds.y };
@@ -47,6 +68,7 @@ export default class Survivor {
 				this.settings.planning
 			) {
 				console.log('--selecting survivor');
+				this.routeNodes = [];
 				onTarget = true;
 				routeNodes.push(clientCoords);
 			}
@@ -70,8 +92,15 @@ export default class Survivor {
 		this.canvas.el.onmouseup = (e) => {
 			if (onTarget && routeNodes.length > 1) {
 				console.log('--setting route');
-				console.log(routeNodes);
+				this.routeNodes = routeNodes;
+				_drawPath();
 			}
+
+			if (onTarget && routeNodes.length <= 1) {
+				console.log('--setting route (none)');
+				this.routeNodes = [];
+			}
+
 			onTarget = false;
 			routeNodes = [];
 			clientCoords = null;
