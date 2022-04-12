@@ -1,6 +1,7 @@
 import { movingSprites } from './dictonary.js';
-import Settings from './Settings.js';
 import Canvas from './Canvas.js';
+import Settings from './Settings.js';
+import Environment from './Environment.js';
 import Survivor from './Survivor.js';
 
 function timeout(ms) {
@@ -31,6 +32,12 @@ window.onload = async function () {
 
 	// Allow canvas & images to load
 	await timeout(1000);
+
+	const environment = new Environment([{ x: 0, y: 0, width: canvas.width, height: 10 }]);
+	environment.init();
+	window.Canvas.update = () => {
+		environment.init();
+	};
 
 	const survivor = new Survivor(10, 10);
 

@@ -86,6 +86,8 @@ export default class Survivor {
 					y: this.y + this.height / 2,
 				},
 			];
+
+			if (window.Canvas.update) window.Canvas.update();
 		};
 
 		// Draw route on mouse move
@@ -101,6 +103,7 @@ export default class Survivor {
 
 			routeNodes.push(clientCoords);
 			window.Canvas.clear();
+			if (window.Canvas.update) window.Canvas.update();
 			this.drawRoutePath(routeNodes);
 			this.drawSurvivor();
 		};
@@ -113,6 +116,7 @@ export default class Survivor {
 
 			this.routeNodes = routeNodes;
 			window.Canvas.clear();
+			if (window.Canvas.update) window.Canvas.update();
 			this.drawRoutePath(routeNodes);
 			this.drawSurvivor();
 
@@ -120,6 +124,7 @@ export default class Survivor {
 		};
 	}
 
+	// Update sprite of survivor based on degrees to final point
 	orientSurvivor(x1, y1, x2, y2) {
 		const x = x2 - x1;
 		const y = y2 - y1;
@@ -139,7 +144,9 @@ export default class Survivor {
 	// Moves survivor in direction of drawn route
 	moveSurvivor() {
 		if (!this.routeNodes || (this.routeNodes && !this.routeNodes.length)) return;
-		let moveSpriteIndex = 0;
+
+		console.log('--moving & orienting survivor');
+
 		let nodeIndex = 0;
 		const fps = 5;
 
@@ -147,17 +154,17 @@ export default class Survivor {
 			this.x = this.routeNodes[nodeIndex].x - this.width / 2;
 			this.y = this.routeNodes[nodeIndex].y - this.height / 2;
 			const lastNode = this.routeNodes[this.routeNodes.length - 1];
-			console.log(lastNode);
+
 			if (lastNode) {
 				this.orientSurvivor(lastNode.x, lastNode.y, this.x, this.y);
 			}
 
 			window.Canvas.clear();
+			if (window.Canvas.update) window.Canvas.update();
 			this.drawRoutePath(this.routeNodes);
 			this.drawSurvivor();
 
 			nodeIndex = nodeIndex + 1;
-			moveSpriteIndex = moveSpriteIndex + 1;
 
 			setTimeout(() => {
 				if (nodeIndex < this.routeNodes.length - 1) {
