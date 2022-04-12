@@ -2,14 +2,12 @@ export default class Survivor {
 	constructor(x = 0, y = 0) {
 		this.width = 50;
 		this.height = 50;
-		this.x = 10;
-		this.y = 10;
+		this.x = 100;
+		this.y = 100;
 		this.width = 75;
 		this.height = 75;
-		this.rotate = 0; // Survivor is oriented at 90 degree angle
 		this.health = 100;
 		this.sprite = 'idle-0';
-		this.minNodes = 3;
 		this.routeNodes = [];
 	}
 
@@ -24,16 +22,13 @@ export default class Survivor {
 		const sprite = document.getElementById(this.sprite);
 		const xAxis = this.x + this.width / 2;
 		const yAxis = this.y + this.height / 2;
-		window.Canvas.ctx.translate(xAxis, yAxis);
-		window.Canvas.ctx.rotate(this.rotate);
-		window.Canvas.ctx.translate(xAxis * -1, yAxis * -1);
 		window.Canvas.ctx.drawImage(sprite, this.x, this.y, this.width, this.height);
 		//window.Canvas.ctx.strokeRect(this.x, this.y, this.width, this.height);
 		window.Survivor = this;
 	}
 
 	drawRoutePath(routeNodes) {
-		if (!routeNodes.length || (routeNodes.length && routeNodes.length < this.minNodes)) return;
+		if (!routeNodes.length) return;
 		window.Canvas.ctx.beginPath();
 		window.Canvas.ctx.moveTo(routeNodes[0].x, routeNodes[0].y);
 		routeNodes.forEach((node, index) => {
@@ -75,94 +70,105 @@ export default class Survivor {
 			clientCoords = null;
 			canvasBounds = window.Canvas.el.getBoundingClientRect();
 			clientCoords = { x: e.clientX - canvasBounds.x, y: e.clientY - canvasBounds.y };
-			if (
-				clientCoords.x > this.x &&
-				clientCoords.x < this.x + this.width &&
-				clientCoords.y > this.y &&
-				clientCoords.y < this.y + this.height &&
-				window.Settings.planning
-			) {
-				console.log('--selecting survivor');
-				routeNodes = [
-					{
-						x: this.x + this.width / 2,
-						y: this.y + this.height / 2,
-					},
-				];
 
-				onTarget = true;
+			if (!window.Settings.planning) return;
 
-				window.Canvas.el.classList.add('selecting');
-			}
+			console.log('--selecting survivor');
+
+			onTarget = true;
+			window.Canvas.el.classList.add('selecting');
+
+			routeNodes = [
+				{
+					x: this.x + this.width / 2,
+					y: this.y + this.height / 2,
+				},
+			];
 		};
 
 		// Draw route on mouse move
 		window.Canvas.el.onmousemove = (e) => {
-			if (onTarget) {
-				const previousNode = routeNodes[routeNodes.length - 1];
-				clientCoords = { x: e.clientX - canvasBounds.x, y: e.clientY - canvasBounds.y };
+			if (!onTarget) return;
 
-				console.log('--drawing route');
-				routeNodes.push(clientCoords);
-				if (routeNodes && routeNodes.length > this.minNodes) {
-					window.Canvas.clear();
-					this.drawRoutePath(routeNodes);
-					this.drawSurvivor();
-				}
+			console.log('--drawing route');
 
-				window.Canvas.el.classList.remove('selecting');
-				window.Canvas.el.classList.add('drawing');
-			}
+			window.Canvas.el.classList.remove('selecting');
+			window.Canvas.el.classList.add('drawing');
+			const previousNode = routeNodes[routeNodes.length - 1];
+			clientCoords = { x: e.clientX - canvasBounds.x, y: e.clientY - canvasBounds.y };
+
+			routeNodes.push(clientCoords);
+			window.Canvas.clear();
+			this.drawRoutePath(routeNodes);
+			this.drawSurvivor();
 		};
+
 		// Set final coords on mouse up
 		window.Canvas.el.onmouseup = (e) => {
-			if (onTarget && routeNodes.length > this.minNodes) {
-				console.log('--setting route');
-				this.routeNodes = routeNodes;
-			} else {
-				this.routeNodes = [];
-			}
+			console.log('--setting route');
+
+			window.Canvas.el.classList.remove('drawing');
+
+			this.routeNodes = routeNodes;
 			window.Canvas.clear();
 			this.drawRoutePath(routeNodes);
 			this.drawSurvivor();
 
 			onTarget = false;
-
-			window.Canvas.el.classList.remove('drawing');
 		};
 	}
+
+	orientSurvivor(nextX, nextY) {
+		let xDiff = 0;
+		if (nextX > this.x) xDiff = nextX - this.x;
+		if (this.x > nextX) xDiff = this.x - nextY;
+
+		let yDiff = nextY - this.y;
+		if (nextY > this.y) xDiff = nextY - this.y;
+		if (this.y > nextY) xDiff = this.y - nextY;
+
+		let theta = Math.atan2(yDiff, xDiff); // range (-PI, PI]
+		theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
+
+		// if (theta >= 0 && theta < 45) this.sprite = 'move-90';
+		// if (theta >= 45 && theta < 90) this.sprite = 'move-180';
+		// if (theta >= 90 && theta < 135) this.sprite = 'move-180';
+		// if (theta >= 135 && theta < 180) this.sprite = 'move-270';
+		// if (theta >= 180 && theta < 225) this.sprite = 'move-225';
+		// if (theta >= 225 && theta < 270) this.sprite = 'move-270';
+		// if (theta >= 270 && theta < 315) this.sprite = 'move-315';
+		// if (theta >= 315 && theta <= 360) this.sprite = 'move-0';
+	}
+
 	// Moves survivor in direction of drawn route
 	moveSurvivor() {
-		if (this.routeNodes && this.routeNodes.length) {
-			let moveSpriteIndex = 0;
-			let nodeIndex = 0;
-			const fps = 10;
+		if (!this.routeNodes || (this.routeNodes && !this.routeNodes.length)) return;
+		let moveSpriteIndex = 0;
+		let nodeIndex = 0;
+		const fps = 5;
 
-			const _animate = () => {
-				this.x = this.routeNodes[nodeIndex].x - this.width / 2;
-				this.y = this.routeNodes[nodeIndex].y - this.height / 2;
-				if (moveSpriteIndex >= 20) moveSpriteIndex = 0;
-				this.sprite = `move-${moveSpriteIndex}`;
+		const _animate = () => {
+			this.x = this.routeNodes[nodeIndex].x - this.width / 2;
+			this.y = this.routeNodes[nodeIndex].y - this.height / 2;
+			const nextNode = this.routeNodes[nodeIndex + 1];
+			if (nextNode) {
+				this.orientSurvivor(nextNode.x - this.width / 2, nextNode.y - this.height / 2);
+			}
 
-				if (this.routeNodes.length - 2 === nodeIndex) {
-					this.sprite = 'idle-0';
+			window.Canvas.clear();
+			this.drawRoutePath(this.routeNodes);
+			this.drawSurvivor();
+
+			nodeIndex = nodeIndex + 1;
+			moveSpriteIndex = moveSpriteIndex + 1;
+
+			setTimeout(() => {
+				if (nodeIndex < this.routeNodes.length - 1) {
+					window.requestAnimationFrame(_animate);
 				}
+			}, 1000 / fps);
+		};
 
-				window.Canvas.clear();
-				this.drawRoutePath(this.routeNodes);
-				this.drawSurvivor();
-
-				nodeIndex = nodeIndex + 1;
-				moveSpriteIndex = moveSpriteIndex + 1;
-
-				setTimeout(() => {
-					if (nodeIndex < this.routeNodes.length - 1) {
-						window.requestAnimationFrame(_animate);
-					}
-				}, 1000 / fps);
-			};
-
-			_animate();
-		}
+		_animate();
 	}
 }

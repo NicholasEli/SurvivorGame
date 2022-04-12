@@ -18,14 +18,14 @@ window.onload = async function () {
 	image.setAttribute('alt', `survivor idle - 0`);
 	container.append(image);
 
-	const movingImageCount = 20;
-	for (let i = 0; i < movingImageCount; i++) {
+	const movingSprites = ['0', '45', '90', '135', '180', '225', '270', '315'];
+	movingSprites.forEach((key) => {
 		const image = document.createElement('img');
-		image.id = `move-${i}`;
-		image.src = `./assets/survivor/rifle/move/survivor-move_rifle_${i}.png`;
-		image.setAttribute('alt', `survivor move - ${i}`);
+		image.id = `move-${key}`;
+		image.src = `./assets/survivor/rifle/move/survivor-move_rifle_${key}.png`;
+		image.setAttribute('alt', `survivor move - ${key}`);
 		container.append(image);
-	}
+	});
 
 	// Allow images to load
 	await timeout(1000);
