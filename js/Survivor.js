@@ -22,13 +22,16 @@ export default class Survivor {
 
 	init() {
 		if (!this.canvas && !this.settings) return;
-
-		const sprite = document.getElementById(this.sprite);
-		this.calcWidthHeight(this.sprite);
-		this.canvas.ctx.drawImage(sprite, this.x, this.y, this.width, this.height);
+		this.drawSurvivor();
 		//this.ctx.strokeRect(this.x, this.y, this.width, this.height);
 
 		this.drawRoute();
+	}
+
+	drawSurvivor() {
+		const sprite = document.getElementById(this.sprite);
+		this.calcWidthHeight(this.sprite);
+		this.canvas.ctx.drawImage(sprite, this.x, this.y, this.width, this.height);
 	}
 
 	drawRoute() {
@@ -38,7 +41,8 @@ export default class Survivor {
 		let clientCoords = null;
 
 		const _drawPath = () => {
-			console.clear();
+			if (!routeNodes.length || (routeNodes.length && routeNodes.length < 3)) return;
+			this.canvas.ctx.beginPath();
 			this.canvas.ctx.moveTo(routeNodes[0].x, routeNodes[0].y);
 			routeNodes.forEach((node, index) => {
 				if (!routeNodes[index] || !routeNodes[index + 1]) return;
@@ -58,6 +62,9 @@ export default class Survivor {
 		};
 
 		this.canvas.el.onmousedown = (e) => {
+			onTarget = false;
+			routeNodes = [];
+			clientCoords = null;
 			canvasBounds = this.canvas.el.getBoundingClientRect();
 			clientCoords = { x: e.clientX - canvasBounds.x, y: e.clientY - canvasBounds.y };
 			if (
@@ -68,7 +75,7 @@ export default class Survivor {
 				this.settings.planning
 			) {
 				console.log('--selecting survivor');
-				this.routeNodes = [];
+				routeNodes = [];
 				onTarget = true;
 				routeNodes.push(clientCoords);
 			}
@@ -93,17 +100,13 @@ export default class Survivor {
 			if (onTarget && routeNodes.length > 1) {
 				console.log('--setting route');
 				this.routeNodes = routeNodes;
-				_drawPath();
-			}
-
-			if (onTarget && routeNodes.length <= 1) {
-				console.log('--setting route (none)');
+			} else {
 				this.routeNodes = [];
 			}
 
-			onTarget = false;
-			routeNodes = [];
-			clientCoords = null;
+			this.canvas.clear();
+			_drawPath();
+			this.drawSurvivor();
 		};
 	}
 }
