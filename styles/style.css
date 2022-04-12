@@ -129,6 +129,12 @@ table {
   border-spacing: 0;
 }
 
+:root {
+  --light-blue: $light-blue;
+  --dark-blue: $dark-blue;
+  --light-green: $green;
+}
+
 #survivor {
   display: none;
 }

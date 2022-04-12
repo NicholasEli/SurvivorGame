@@ -1,2 +1,9 @@
 $light-blue: #4378a6;
 $dark-blue: #0c2843;
+$light-green: #39ff14;
+
+:root {
+	--light-blue: $light-blue;
+	--dark-blue: $dark-blue;
+	--light-green: $green;
+}

@@ -35,13 +35,15 @@ export default class Survivor {
 	}
 
 	drawRoute() {
+		const minDistanceBetweenNodes = 25;
+		const minNodes = 3;
 		let onTarget = false;
 		let routeNodes = [];
 		let canvasBounds = null;
 		let clientCoords = null;
 
 		const _drawPath = () => {
-			if (!routeNodes.length || (routeNodes.length && routeNodes.length < 3)) return;
+			if (!routeNodes.length || (routeNodes.length && routeNodes.length < minNodes)) return;
 			this.canvas.ctx.beginPath();
 			this.canvas.ctx.moveTo(routeNodes[0].x, routeNodes[0].y);
 			routeNodes.forEach((node, index) => {
@@ -57,8 +59,17 @@ export default class Survivor {
 				routeNodes[i + 1].x,
 				routeNodes[i + 1].y
 			);
+
 			this.canvas.ctx.lineWidth = 3;
+			this.canvas.ctx.setLineDash([5, 15]);
+			this.canvas.ctx.strokeStyle = '#39ff14';
 			this.canvas.ctx.stroke();
+
+			const lastNode = routeNodes[routeNodes.length - 1];
+			this.canvas.ctx.fillStyle = '#39ff14';
+			this.canvas.ctx.beginPath();
+			this.canvas.ctx.arc(lastNode.x, lastNode.y, 5, 0, 2 * Math.PI);
+			this.canvas.ctx.fill();
 		};
 
 		this.canvas.el.onmousedown = (e) => {
@@ -87,17 +98,23 @@ export default class Survivor {
 				clientCoords = { x: e.clientX - canvasBounds.x, y: e.clientY - canvasBounds.y };
 
 				if (
-					parseInt(clientCoords.x - previousNode.x) > 50 ||
-					parseInt(clientCoords.y - previousNode.y) > 50
+					parseInt(clientCoords.x - previousNode.x) > minDistanceBetweenNodes ||
+					parseInt(clientCoords.y - previousNode.y) > minDistanceBetweenNodes
 				) {
 					console.log('--drawing route');
 					routeNodes.push(clientCoords);
+					if (routeNodes && routeNodes.length > minNodes) {
+						this.canvas.clear();
+						_drawPath();
+						this.drawSurvivor();
+					}
 				}
 			}
 		};
 
 		this.canvas.el.onmouseup = (e) => {
-			if (onTarget && routeNodes.length > 1) {
+			onTarget = false;
+			if (onTarget && routeNodes.length > minNodes) {
 				console.log('--setting route');
 				this.routeNodes = routeNodes;
 			} else {
