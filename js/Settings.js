@@ -37,6 +37,7 @@ export default class Settings {
 			playBtn.classList.remove('active');
 			pauseBtn.classList.add('active');
 			if (this.playCallback) this.playCallback();
+			window.Settings = this;
 		};
 
 		const pauseBtn = document.createElement('div');
@@ -47,9 +48,11 @@ export default class Settings {
 			pauseBtn.classList.remove('active');
 			playBtn.classList.add('active');
 			if (this.pauseCallback) this.pauseCallback();
+			window.Settings = this;
 		};
 
 		document.body.append(playBtn);
 		document.body.append(pauseBtn);
+		window.Settings = this;
 	}
 }

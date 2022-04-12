@@ -26,6 +26,7 @@ export default class Canvas {
 		this.height = bounds.height;
 		this.y = bounds.y;
 		this.x = bounds.x;
+		window.Canvas = this;
 	}
 
 	get getDimensions() {

@@ -25,12 +25,14 @@ export default class Survivor {
 		//this.ctx.strokeRect(this.x, this.y, this.width, this.height);
 
 		this.drawRoute();
+		window.Survivor = this;
 	}
 
 	drawSurvivor() {
 		const sprite = document.getElementById(this.sprite);
 		this.calcWidthHeight(this.sprite);
 		this.canvas.ctx.drawImage(sprite, this.x, this.y, this.width, this.height);
+		window.Survivor = this;
 	}
 
 	drawRoute() {
@@ -81,7 +83,8 @@ export default class Survivor {
 				clientCoords.x > this.x &&
 				clientCoords.x < this.x + this.width &&
 				clientCoords.y > this.y &&
-				clientCoords.y < this.y + this.height
+				clientCoords.y < this.y + this.height &&
+				window.Settings.planning
 			) {
 				console.log('--selecting survivor');
 				routeNodes = [];
@@ -115,7 +118,6 @@ export default class Survivor {
 				console.log('--setting route');
 				this.routeNodes = routeNodes;
 			} else {
-				console.log('clear');
 				this.routeNodes = [];
 			}
 			this.canvas.clear();
@@ -127,7 +129,7 @@ export default class Survivor {
 
 	moveSurvivor() {
 		if (this.routeNodes && this.routeNodes.length) {
-			console.log('moving');
+			let frameCount = 0;
 		}
 	}
 }
