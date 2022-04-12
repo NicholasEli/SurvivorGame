@@ -120,27 +120,20 @@ export default class Survivor {
 		};
 	}
 
-	orientSurvivor(nextX, nextY) {
-		let xDiff = 0;
-		if (nextX > this.x) xDiff = nextX - this.x;
-		if (this.x > nextX) xDiff = this.x - nextY;
+	orientSurvivor(x1, y1, x2, y2) {
+		const x = x2 - x1;
+		const y = y2 - y1;
+		const radians = Math.atan2(y, x);
+		let degrees = (radians * 180) / Math.PI - 90;
+		while (degrees >= 360) degrees -= 360;
+		while (degrees < 0) degrees += 360;
 
-		let yDiff = nextY - this.y;
-		if (nextY > this.y) xDiff = nextY - this.y;
-		if (this.y > nextY) xDiff = this.y - nextY;
+		const sprites = movingSprites.map((sprite) => sprite.degree);
+		const closest = sprites.reduce((prev, curr) =>
+			Math.abs(curr - degrees) < Math.abs(prev - degrees) ? curr : prev
+		);
 
-		let theta = Math.atan2(yDiff, xDiff); // range (-PI, PI]
-		theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
-		console.log(theta);
-
-		// if (theta >= 0 && theta < 45) this.sprite = 'move-90';
-		// if (theta >= 45 && theta < 90) this.sprite = 'move-180';
-		// if (theta >= 90 && theta < 135) this.sprite = 'move-180';
-		// if (theta >= 135 && theta < 180) this.sprite = 'move-270';
-		// if (theta >= 180 && theta < 225) this.sprite = 'move-225';
-		// if (theta >= 225 && theta < 270) this.sprite = 'move-270';
-		// if (theta >= 270 && theta < 315) this.sprite = 'move-315';
-		// if (theta >= 315 && theta <= 360) this.sprite = 'move-0';
+		this.sprite = 'move-' + closest;
 	}
 
 	// Moves survivor in direction of drawn route
@@ -153,9 +146,10 @@ export default class Survivor {
 		const _animate = () => {
 			this.x = this.routeNodes[nodeIndex].x - this.width / 2;
 			this.y = this.routeNodes[nodeIndex].y - this.height / 2;
-			const nextNode = this.routeNodes[nodeIndex + 1];
-			if (nextNode) {
-				this.orientSurvivor(nextNode.x - this.width / 2, nextNode.y - this.height / 2);
+			const lastNode = this.routeNodes[this.routeNodes.length - 1];
+			console.log(lastNode);
+			if (lastNode) {
+				this.orientSurvivor(lastNode.x, lastNode.y, this.x, this.y);
 			}
 
 			window.Canvas.clear();
