@@ -199,6 +199,7 @@ export default class Survivor {
 				}
 
 				if (nodeIndex >= this.routeNodes.length - 1) {
+					console.log('--finished moving & orienting survivor');
 					window.Canvas.clear();
 					if (window.Canvas.update) window.Canvas.update();
 					this.routeNodes = [];
