@@ -11,6 +11,6 @@ window.onload = function () {
 	const canvas = new Canvas();
 	const canvasProps = canvas.init();
 
-	const survivor = new Survivor(canvasProps.context, 10, 10);
+	const survivor = new Survivor(canvas.element, canvasProps.context, 10, 10);
 	survivor.init();
 };

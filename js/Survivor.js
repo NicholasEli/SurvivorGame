@@ -1,5 +1,5 @@
 export default class Survivor {
-	constructor(ctx, x = 0, y = 0) {
+	constructor(canvas, ctx, x = 0, y = 0) {
 		this.ctx = ctx;
 		this.width = 50;
 		this.height = 50;
