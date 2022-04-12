@@ -22,11 +22,6 @@ export default class Canvas {
 		this.height = bounds.height;
 		this.y = bounds.y;
 		this.x = bounds.x;
-
-		return {
-			element: this.canvas,
-			context: this.ctx,
-		};
 	}
 
 	get getDimensions() {

@@ -1,6 +1,6 @@
 export default class Survivor {
 	constructor(canvas, ctx, x = 0, y = 0) {
-		this.ctx = ctx;
+		this.canvas = canvas;
 		this.width = 50;
 		this.height = 50;
 		this.x = 0;
@@ -20,9 +20,13 @@ export default class Survivor {
 	}
 
 	init() {
+		if (!this.canvas && !this.ctx) return;
+
 		const sprite = document.getElementById(this.sprite);
 		this.calcWidthHeight(this.sprite);
-		this.ctx.drawImage(sprite, this.x, this.y, this.width, this.height);
+		this.canvas.ctx.drawImage(sprite, this.x, this.y, this.width, this.height);
 		//this.ctx.strokeRect(this.x, this.y, this.width, this.height);
+
+		console.log(this.canvas);
 	}
 }

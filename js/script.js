@@ -5,12 +5,12 @@ import Survivor from './Survivor.js';
 window.onload = function () {
 	console.log('--Server Running');
 
-	const settings = new Settings();
+	const canvas = new Canvas();
+	canvas.init();
+
+	const settings = new Settings(canvas);
 	settings.init();
 
-	const canvas = new Canvas();
-	const canvasProps = canvas.init();
-
-	const survivor = new Survivor(canvas.element, canvasProps.context, 10, 10);
+	const survivor = new Survivor(canvas, 10, 10);
 	survivor.init();
 };
