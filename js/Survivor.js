@@ -6,7 +6,7 @@ export default class Survivor {
 		this.y = 10;
 		this.width = 75;
 		this.height = 75;
-		this.rotate = 0;
+		this.rotate = 0; // Survivor is oriented at 90 degree angle
 		this.health = 100;
 		this.sprite = 'idle-0';
 		this.minNodes = 3;
@@ -68,6 +68,7 @@ export default class Survivor {
 		let canvasBounds = null;
 		let clientCoords = null;
 
+		// Get the intial mouse event
 		window.Canvas.el.onmousedown = (e) => {
 			onTarget = false;
 			routeNodes = [];
@@ -88,10 +89,14 @@ export default class Survivor {
 						y: this.y + this.height / 2,
 					},
 				];
+
 				onTarget = true;
+
+				window.Canvas.el.classList.add('selecting');
 			}
 		};
 
+		// Draw route on mouse move
 		window.Canvas.el.onmousemove = (e) => {
 			if (onTarget) {
 				const previousNode = routeNodes[routeNodes.length - 1];
@@ -104,9 +109,12 @@ export default class Survivor {
 					this.drawRoutePath(routeNodes);
 					this.drawSurvivor();
 				}
+
+				window.Canvas.el.classList.remove('selecting');
+				window.Canvas.el.classList.add('drawing');
 			}
 		};
-
+		// Set final coords on mouse up
 		window.Canvas.el.onmouseup = (e) => {
 			if (onTarget && routeNodes.length > this.minNodes) {
 				console.log('--setting route');
@@ -119,9 +127,11 @@ export default class Survivor {
 			this.drawSurvivor();
 
 			onTarget = false;
+
+			window.Canvas.el.classList.remove('drawing');
 		};
 	}
-
+	// Moves survivor in direction of drawn route
 	moveSurvivor() {
 		if (this.routeNodes && this.routeNodes.length) {
 			let moveSpriteIndex = 0;

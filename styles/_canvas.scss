@@ -1,4 +1,10 @@
 canvas {
 	background-image: url('../assets/cement-floor.jpeg');
 	background-size: contain;
+	cursor: crosshair;
+
+	&.selecting,
+	&.drawing {
+		cursor: none;
+	}
 }

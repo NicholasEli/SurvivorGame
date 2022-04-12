@@ -27,6 +27,7 @@ window.onload = async function () {
 		container.append(image);
 	}
 
+	// Allow images to load
 	await timeout(1000);
 
 	const canvas = new Canvas();
