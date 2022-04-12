@@ -15,8 +15,7 @@ const pauseBtnMarkup = `
 			</svg>`;
 
 export default class Settings {
-	constructor(canvas = null, playCallback = null, pauseCallback = null) {
-		this.canvas = canvas;
+	constructor(playCallback = null, pauseCallback = null) {
 		this.planning = true;
 		this.playCallback = playCallback;
 		this.pauseCallback = pauseCallback;

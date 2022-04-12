@@ -1,6 +1,5 @@
 export default class Survivor {
-	constructor(canvas, x = 0, y = 0) {
-		this.canvas = canvas;
+	constructor(x = 0, y = 0) {
 		this.width = 50;
 		this.height = 50;
 		this.x = 0;
@@ -9,6 +8,7 @@ export default class Survivor {
 		this.height = 75;
 		this.health = 100;
 		this.sprite = 'idle-0';
+		this.minNodes = 3;
 		this.routeNodes = [];
 	}
 
@@ -20,64 +20,63 @@ export default class Survivor {
 	}
 
 	init() {
-		if (!this.canvas) return;
+		if (!window.Canvas) return;
 		this.drawSurvivor();
 		//this.ctx.strokeRect(this.x, this.y, this.width, this.height);
 
-		this.drawRoute();
+		this.routeEvents();
 		window.Survivor = this;
 	}
 
 	drawSurvivor() {
 		const sprite = document.getElementById(this.sprite);
 		this.calcWidthHeight(this.sprite);
-		this.canvas.ctx.drawImage(sprite, this.x, this.y, this.width, this.height);
+		window.Canvas.ctx.drawImage(sprite, this.x, this.y, this.width, this.height);
 		window.Survivor = this;
 	}
 
-	drawRoute() {
+	drawRoutePath(routeNodes) {
+		if (!routeNodes.length || (routeNodes.length && routeNodes.length < this.minNodes)) return;
+		window.Canvas.ctx.beginPath();
+		window.Canvas.ctx.moveTo(routeNodes[0].x, routeNodes[0].y);
+		routeNodes.forEach((node, index) => {
+			if (!routeNodes[index] || !routeNodes[index + 1]) return;
+			const xc = (routeNodes[index].x + routeNodes[index + 1].x) / 2;
+			const yc = (routeNodes[index].y + routeNodes[index + 1].y) / 2;
+			window.Canvas.ctx.quadraticCurveTo(routeNodes[index].x, routeNodes[index].y, xc, yc);
+		});
+		const i = routeNodes.length - 2;
+		window.Canvas.ctx.quadraticCurveTo(
+			routeNodes[i].x,
+			routeNodes[i].y,
+			routeNodes[i + 1].x,
+			routeNodes[i + 1].y
+		);
+
+		window.Canvas.ctx.lineWidth = 3;
+		window.Canvas.ctx.setLineDash([5, 15]);
+		window.Canvas.ctx.strokeStyle = '#39ff14';
+		window.Canvas.ctx.stroke();
+
+		const lastNode = routeNodes[routeNodes.length - 1];
+		window.Canvas.ctx.fillStyle = '#39ff14';
+		window.Canvas.ctx.beginPath();
+		window.Canvas.ctx.arc(lastNode.x, lastNode.y, 5, 0, 2 * Math.PI);
+		window.Canvas.ctx.fill();
+	}
+
+	routeEvents() {
 		const minDistanceBetweenNodes = 25;
-		const minNodes = 3;
 		let onTarget = false;
 		let routeNodes = [];
 		let canvasBounds = null;
 		let clientCoords = null;
 
-		const _drawPath = () => {
-			if (!routeNodes.length || (routeNodes.length && routeNodes.length < minNodes)) return;
-			this.canvas.ctx.beginPath();
-			this.canvas.ctx.moveTo(routeNodes[0].x, routeNodes[0].y);
-			routeNodes.forEach((node, index) => {
-				if (!routeNodes[index] || !routeNodes[index + 1]) return;
-				const xc = (routeNodes[index].x + routeNodes[index + 1].x) / 2;
-				const yc = (routeNodes[index].y + routeNodes[index + 1].y) / 2;
-				this.canvas.ctx.quadraticCurveTo(routeNodes[index].x, routeNodes[index].y, xc, yc);
-			});
-			const i = routeNodes.length - 2;
-			this.canvas.ctx.quadraticCurveTo(
-				routeNodes[i].x,
-				routeNodes[i].y,
-				routeNodes[i + 1].x,
-				routeNodes[i + 1].y
-			);
-
-			this.canvas.ctx.lineWidth = 3;
-			this.canvas.ctx.setLineDash([5, 15]);
-			this.canvas.ctx.strokeStyle = '#39ff14';
-			this.canvas.ctx.stroke();
-
-			const lastNode = routeNodes[routeNodes.length - 1];
-			this.canvas.ctx.fillStyle = '#39ff14';
-			this.canvas.ctx.beginPath();
-			this.canvas.ctx.arc(lastNode.x, lastNode.y, 5, 0, 2 * Math.PI);
-			this.canvas.ctx.fill();
-		};
-
-		this.canvas.el.onmousedown = (e) => {
+		window.Canvas.el.onmousedown = (e) => {
 			onTarget = false;
 			routeNodes = [];
 			clientCoords = null;
-			canvasBounds = this.canvas.el.getBoundingClientRect();
+			canvasBounds = window.Canvas.el.getBoundingClientRect();
 			clientCoords = { x: e.clientX - canvasBounds.x, y: e.clientY - canvasBounds.y };
 			if (
 				clientCoords.x > this.x &&
@@ -93,7 +92,7 @@ export default class Survivor {
 			}
 		};
 
-		this.canvas.el.onmousemove = (e) => {
+		window.Canvas.el.onmousemove = (e) => {
 			if (onTarget) {
 				const previousNode = routeNodes[routeNodes.length - 1];
 				clientCoords = { x: e.clientX - canvasBounds.x, y: e.clientY - canvasBounds.y };
@@ -104,24 +103,25 @@ export default class Survivor {
 				) {
 					console.log('--drawing route');
 					routeNodes.push(clientCoords);
-					if (routeNodes && routeNodes.length > minNodes) {
-						this.canvas.clear();
-						_drawPath();
+					if (routeNodes && routeNodes.length > this.minNodes) {
+						window.Canvas.clear();
+						this.drawRoutePath(routeNodes);
 						this.drawSurvivor();
 					}
 				}
 			}
 		};
 
-		this.canvas.el.onmouseup = (e) => {
-			if (onTarget && routeNodes.length > minNodes) {
+		window.Canvas.el.onmouseup = (e) => {
+			if (onTarget && routeNodes.length > this.minNodes) {
 				console.log('--setting route');
 				this.routeNodes = routeNodes;
 			} else {
 				this.routeNodes = [];
 			}
-			this.canvas.clear();
-			_drawPath();
+			window.Canvas.clear();
+			//window.Canvas.clear();
+			this.drawRoutePath(routeNodes);
 			this.drawSurvivor();
 			onTarget = false;
 		};
@@ -129,7 +129,25 @@ export default class Survivor {
 
 	moveSurvivor() {
 		if (this.routeNodes && this.routeNodes.length) {
+			let nodeIndex = 0;
 			let frameCount = 0;
+
+			const _animate = () => {
+				console.log(this.routeNodes[nodeIndex]);
+				if (nodeIndex < this.routeNodes.length - 1) {
+					window.requestAnimationFrame(_animate);
+				}
+
+				this.x = this.routeNodes[nodeIndex].x;
+				this.y = this.routeNodes[nodeIndex].y;
+
+				window.Canvas.clear();
+				this.drawSurvivor();
+
+				nodeIndex = nodeIndex + 1;
+			};
+
+			_animate();
 		}
 	}
 }
