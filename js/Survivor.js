@@ -7,7 +7,7 @@ export default class Survivor {
 		this.width = 50;
 		this.height = 50;
 		this.x = window.Canvas.width / 2 - wh / 2;
-		this.y = window.Canvas.height - 100;
+		this.y = window.Canvas.height - wh * 2;
 		this.width = wh;
 		this.height = wh;
 		this.health = 100;
@@ -64,9 +64,8 @@ export default class Survivor {
 		window.Canvas.ctx.fill();
 	}
 
-	environmentCollision(x, y) {
+	environmentCollision(x, y, buffer = 3) {
 		const walls = window.Environment.walls;
-		const buffer = 3;
 
 		let collision = false;
 		walls.forEach((wall) => {
