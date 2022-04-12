@@ -10,7 +10,9 @@ function timeout(ms) {
 window.onload = async function () {
 	console.log('--Server Running');
 
-	const idleImageCount = 0;
+	const canvas = new Canvas();
+	canvas.init();
+
 	const container = document.getElementById('survivor');
 
 	let image = document.createElement('img');
@@ -27,10 +29,9 @@ window.onload = async function () {
 		container.append(image);
 	});
 
-	// Allow images to load
+	// Allow canvas & images to load
 	await timeout(1000);
 
-	const canvas = new Canvas();
 	const survivor = new Survivor(10, 10);
 
 	const playCallback = () => {
@@ -41,8 +42,6 @@ window.onload = async function () {
 		console.log(settings);
 	};
 	const settings = new Settings(playCallback, pauseCallback);
-
-	canvas.init();
 	settings.init();
 	survivor.init();
 };

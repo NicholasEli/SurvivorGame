@@ -14,3 +14,5 @@ export const movingSprites = [
 	{ degree: 285 },
 	{ degree: 315 },
 ];
+
+export const idleSprites = [{ degree: 0 }];

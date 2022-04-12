@@ -4,12 +4,12 @@ export default class Survivor {
 	constructor(x = 0, y = 0) {
 		this.width = 50;
 		this.height = 50;
-		this.x = 100;
-		this.y = 100;
+		this.x = window.Canvas.width / 2;
+		this.y = window.Canvas.height - 100;
 		this.width = 75;
 		this.height = 75;
 		this.health = 100;
-		this.sprite = 'idle-0';
+		this.sprite = 'move-0';
 		this.routeNodes = [];
 	}
 
