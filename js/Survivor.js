@@ -4,34 +4,26 @@ export default class Survivor {
 		this.height = 50;
 		this.x = 0;
 		this.y = 0;
-		this.width = 100;
+		this.width = 75;
 		this.height = 75;
 		this.health = 100;
 		this.sprite = 'idle-0';
 		this.minNodes = 3;
+		this.minDistanceBetweenNodes = 5;
 		this.routeNodes = [];
-	}
-
-	calcWidthHeight(sprite) {
-		if (sprite === 'idle-0') {
-			this.width = 100;
-			this.height = 66;
-		}
 	}
 
 	init() {
 		if (!window.Canvas) return;
 		this.drawSurvivor();
-		//this.ctx.strokeRect(this.x, this.y, this.width, this.height);
-
-		this.routeEvents();
+		this.setRoute();
 		window.Survivor = this;
 	}
 
 	drawSurvivor() {
 		const sprite = document.getElementById(this.sprite);
-		this.calcWidthHeight(this.sprite);
 		window.Canvas.ctx.drawImage(sprite, this.x, this.y, this.width, this.height);
+		window.Canvas.ctx.strokeRect(this.x, this.y, this.width, this.height);
 		window.Survivor = this;
 	}
 
@@ -65,8 +57,7 @@ export default class Survivor {
 		window.Canvas.ctx.fill();
 	}
 
-	routeEvents() {
-		const minDistanceBetweenNodes = 25;
+	setRoute() {
 		let onTarget = false;
 		let routeNodes = [];
 		let canvasBounds = null;
@@ -86,9 +77,13 @@ export default class Survivor {
 				window.Settings.planning
 			) {
 				console.log('--selecting survivor');
-				routeNodes = [];
+				routeNodes = [
+					{
+						x: this.x + this.width / 2,
+						y: this.y + this.height / 2,
+					},
+				];
 				onTarget = true;
-				routeNodes.push(clientCoords);
 			}
 		};
 
@@ -98,15 +93,15 @@ export default class Survivor {
 				clientCoords = { x: e.clientX - canvasBounds.x, y: e.clientY - canvasBounds.y };
 
 				if (
-					parseInt(clientCoords.x - previousNode.x) > minDistanceBetweenNodes ||
-					parseInt(clientCoords.y - previousNode.y) > minDistanceBetweenNodes
+					parseInt(clientCoords.x - previousNode.x) > this.minDistanceBetweenNodes ||
+					parseInt(clientCoords.y - previousNode.y) > this.minDistanceBetweenNodes
 				) {
 					console.log('--drawing route');
 					routeNodes.push(clientCoords);
 					if (routeNodes && routeNodes.length > this.minNodes) {
 						window.Canvas.clear();
-						this.drawRoutePath(routeNodes);
 						this.drawSurvivor();
+						this.drawRoutePath(routeNodes);
 					}
 				}
 			}
@@ -120,9 +115,9 @@ export default class Survivor {
 				this.routeNodes = [];
 			}
 			window.Canvas.clear();
-			//window.Canvas.clear();
-			this.drawRoutePath(routeNodes);
 			this.drawSurvivor();
+			this.drawRoutePath(routeNodes);
+
 			onTarget = false;
 		};
 	}
@@ -138,11 +133,12 @@ export default class Survivor {
 					window.requestAnimationFrame(_animate);
 				}
 
-				this.x = this.routeNodes[nodeIndex].x;
-				this.y = this.routeNodes[nodeIndex].y;
+				this.x = this.routeNodes[nodeIndex].x - this.width / 2;
+				this.y = this.routeNodes[nodeIndex].y - this.height / 2;
 
 				window.Canvas.clear();
 				this.drawSurvivor();
+				this.drawRoutePath(this.routeNodes);
 
 				nodeIndex = nodeIndex + 1;
 			};
