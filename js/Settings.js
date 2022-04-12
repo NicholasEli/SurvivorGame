@@ -32,26 +32,38 @@ export default class Settings {
 		playBtn.classList.add('active');
 		playBtn.insertAdjacentHTML('beforeend', playBtnMarkup);
 		playBtn.onclick = () => {
-			this.planning = false;
-			playBtn.classList.remove('active');
-			pauseBtn.classList.add('active');
-			if (this.playCallback) this.playCallback();
-			window.Settings = this;
+			this.play();
 		};
 
 		const pauseBtn = document.createElement('div');
-		pauseBtn.id = 'play-btn';
+		pauseBtn.id = 'pause-btn';
 		pauseBtn.insertAdjacentHTML('beforeend', pauseBtnMarkup);
 		pauseBtn.onclick = () => {
-			this.planning = true;
-			pauseBtn.classList.remove('active');
-			playBtn.classList.add('active');
-			if (this.pauseCallback) this.pauseCallback();
-			window.Settings = this;
+			this.pause();
 		};
 
 		document.body.append(playBtn);
 		document.body.append(pauseBtn);
+		window.Settings = this;
+	}
+
+	play() {
+		const playBtn = document.getElementById('play-btn');
+		const pauseBtn = document.getElementById('pause-btn');
+		this.planning = false;
+		playBtn.classList.remove('active');
+		pauseBtn.classList.add('active');
+		if (this.playCallback) this.playCallback();
+		window.Settings = this;
+	}
+
+	pause() {
+		const playBtn = document.getElementById('play-btn');
+		const pauseBtn = document.getElementById('pause-btn');
+		this.planning = true;
+		pauseBtn.classList.remove('active');
+		playBtn.classList.add('active');
+		if (this.pauseCallback) this.pauseCallback();
 		window.Settings = this;
 	}
 }

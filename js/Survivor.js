@@ -41,13 +41,16 @@ export default class Survivor {
 			const yc = (routeNodes[index].y + routeNodes[index + 1].y) / 2;
 			window.Canvas.ctx.quadraticCurveTo(routeNodes[index].x, routeNodes[index].y, xc, yc);
 		});
-		const i = routeNodes.length - 2;
-		window.Canvas.ctx.quadraticCurveTo(
-			routeNodes[i].x,
-			routeNodes[i].y,
-			routeNodes[i + 1].x,
-			routeNodes[i + 1].y
-		);
+		let i = 0;
+		if (routeNodes.length > 3) i = routeNodes.length - 2;
+		if (i > 0) {
+			window.Canvas.ctx.quadraticCurveTo(
+				routeNodes[i].x,
+				routeNodes[i].y,
+				routeNodes[i + 1].x,
+				routeNodes[i + 1].y
+			);
+		}
 
 		window.Canvas.ctx.lineWidth = 3;
 		window.Canvas.ctx.setLineDash([5, 15]);
@@ -59,6 +62,25 @@ export default class Survivor {
 		window.Canvas.ctx.beginPath();
 		window.Canvas.ctx.arc(lastNode.x, lastNode.y, 5, 0, 2 * Math.PI);
 		window.Canvas.ctx.fill();
+	}
+
+	environmentCollision(x, y) {
+		const walls = window.Environment.walls;
+		const buffer = 3;
+
+		let collision = false;
+		walls.forEach((wall) => {
+			if (
+				x > wall.x - buffer &&
+				x < wall.x + wall.width + buffer &&
+				y > wall.y - buffer &&
+				y < wall.y + wall.height + buffer
+			) {
+				collision = true;
+			}
+		});
+
+		return collision;
 	}
 
 	setRoute() {
@@ -75,7 +97,9 @@ export default class Survivor {
 			canvasBounds = window.Canvas.el.getBoundingClientRect();
 			clientCoords = { x: e.clientX - canvasBounds.x, y: e.clientY - canvasBounds.y };
 
-			if (!window.Settings.planning) return;
+			if (!window.Settings.planning || this.environmentCollision(clientCoords.x, clientCoords.y)) {
+				return;
+			}
 
 			console.log('--selecting survivor');
 
@@ -94,7 +118,7 @@ export default class Survivor {
 
 		// Draw route on mouse move
 		window.Canvas.el.onmousemove = (e) => {
-			if (!onTarget) return;
+			if (!onTarget || this.environmentCollision(clientCoords.x, clientCoords.y)) return;
 
 			console.log('--drawing route');
 
@@ -114,6 +138,7 @@ export default class Survivor {
 		window.Canvas.el.onmouseup = (e) => {
 			console.log('--setting route');
 
+			window.Canvas.el.classList.remove('selecting');
 			window.Canvas.el.classList.remove('drawing');
 
 			this.routeNodes = routeNodes;
@@ -150,14 +175,14 @@ export default class Survivor {
 		console.log('--moving & orienting survivor');
 
 		let nodeIndex = 0;
-		const fps = 5;
-
+		const fps = 7;
 		const _animate = () => {
 			this.x = this.routeNodes[nodeIndex].x - this.width / 2;
 			this.y = this.routeNodes[nodeIndex].y - this.height / 2;
 			const lastNode = this.routeNodes[this.routeNodes.length - 1];
 
-			if (lastNode) {
+			// Stop orienting after part way through so survivor does not spin out of control
+			if (lastNode && this.routeNodes.length > 1 && nodeIndex < this.routeNodes.length / 3) {
 				this.orientSurvivor(lastNode.x, lastNode.y, this.x, this.y);
 			}
 
@@ -171,6 +196,10 @@ export default class Survivor {
 			setTimeout(() => {
 				if (nodeIndex < this.routeNodes.length - 1) {
 					window.requestAnimationFrame(_animate);
+				}
+
+				if (nodeIndex >= this.routeNodes.length - 1) {
+					window.Settings.pause();
 				}
 			}, 1000 / fps);
 		};
