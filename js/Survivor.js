@@ -2,8 +2,8 @@ export default class Survivor {
 	constructor(x = 0, y = 0) {
 		this.width = 50;
 		this.height = 50;
-		this.x = 768 / 2 - 75 / 2;
-		this.y = 250 - 75 / 2;
+		this.x = 10;
+		this.y = 10;
 		this.width = 75;
 		this.height = 75;
 		this.rotate = 0;
