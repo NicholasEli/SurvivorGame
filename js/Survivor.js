@@ -9,7 +9,6 @@ export default class Survivor {
 		this.health = 100;
 		this.sprite = 'idle-0';
 		this.minNodes = 3;
-		this.minDistanceBetweenNodes = 5;
 		this.routeNodes = [];
 	}
 
@@ -23,7 +22,7 @@ export default class Survivor {
 	drawSurvivor() {
 		const sprite = document.getElementById(this.sprite);
 		window.Canvas.ctx.drawImage(sprite, this.x, this.y, this.width, this.height);
-		window.Canvas.ctx.strokeRect(this.x, this.y, this.width, this.height);
+		//window.Canvas.ctx.strokeRect(this.x, this.y, this.width, this.height);
 		window.Survivor = this;
 	}
 
@@ -92,17 +91,12 @@ export default class Survivor {
 				const previousNode = routeNodes[routeNodes.length - 1];
 				clientCoords = { x: e.clientX - canvasBounds.x, y: e.clientY - canvasBounds.y };
 
-				if (
-					parseInt(clientCoords.x - previousNode.x) > this.minDistanceBetweenNodes ||
-					parseInt(clientCoords.y - previousNode.y) > this.minDistanceBetweenNodes
-				) {
-					console.log('--drawing route');
-					routeNodes.push(clientCoords);
-					if (routeNodes && routeNodes.length > this.minNodes) {
-						window.Canvas.clear();
-						this.drawSurvivor();
-						this.drawRoutePath(routeNodes);
-					}
+				console.log('--drawing route');
+				routeNodes.push(clientCoords);
+				if (routeNodes && routeNodes.length > this.minNodes) {
+					window.Canvas.clear();
+					this.drawRoutePath(routeNodes);
+					this.drawSurvivor();
 				}
 			}
 		};
@@ -115,8 +109,8 @@ export default class Survivor {
 				this.routeNodes = [];
 			}
 			window.Canvas.clear();
-			this.drawSurvivor();
 			this.drawRoutePath(routeNodes);
+			this.drawSurvivor();
 
 			onTarget = false;
 		};
@@ -124,23 +118,32 @@ export default class Survivor {
 
 	moveSurvivor() {
 		if (this.routeNodes && this.routeNodes.length) {
+			let moveSpriteIndex = 0;
 			let nodeIndex = 0;
-			let frameCount = 0;
+			const fps = 20;
 
 			const _animate = () => {
-				console.log(this.routeNodes[nodeIndex]);
-				if (nodeIndex < this.routeNodes.length - 1) {
-					window.requestAnimationFrame(_animate);
-				}
-
 				this.x = this.routeNodes[nodeIndex].x - this.width / 2;
 				this.y = this.routeNodes[nodeIndex].y - this.height / 2;
+				if (moveSpriteIndex >= 19) moveSpriteIndex = 0;
+				this.sprite = `move-${moveSpriteIndex}`;
+
+				if (this.routeNodes.length - 1 === this.routeNodes.length) {
+					this.sprite = 'idle-0';
+				}
 
 				window.Canvas.clear();
-				this.drawSurvivor();
 				this.drawRoutePath(this.routeNodes);
+				this.drawSurvivor();
 
 				nodeIndex = nodeIndex + 1;
+				moveSpriteIndex = moveSpriteIndex + 1;
+
+				setTimeout(() => {
+					if (nodeIndex < this.routeNodes.length - 1) {
+						window.requestAnimationFrame(_animate);
+					}
+				}, 1000 / fps);
 			};
 
 			_animate();

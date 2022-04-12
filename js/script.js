@@ -2,8 +2,32 @@ import Settings from './Settings.js';
 import Canvas from './Canvas.js';
 import Survivor from './Survivor.js';
 
-window.onload = function () {
+function timeout(ms) {
+	return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+window.onload = async function () {
 	console.log('--Server Running');
+
+	const idleImageCount = 0;
+	const container = document.getElementById('survivor');
+
+	let image = document.createElement('img');
+	image.id = `idle-0`;
+	image.src = `./assets/survivor/rifle/idle/survivor-idle_rifle_0.png`;
+	image.setAttribute('alt', `survivor idle - 0`);
+	container.append(image);
+
+	const movingImageCount = 19;
+	for (let i = 0; i < movingImageCount; i++) {
+		const image = document.createElement('img');
+		image.id = `move-${i}`;
+		image.src = `./assets/survivor/rifle/move/survivor-move_rifle_${i}.png`;
+		image.setAttribute('alt', `survivor move - ${i}`);
+		container.append(image);
+	}
+
+	await timeout(1000);
 
 	const canvas = new Canvas();
 	const survivor = new Survivor(10, 10);
