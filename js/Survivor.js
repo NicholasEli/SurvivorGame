@@ -199,6 +199,11 @@ export default class Survivor {
 				}
 
 				if (nodeIndex >= this.routeNodes.length - 1) {
+					window.Canvas.clear();
+					if (window.Canvas.update) window.Canvas.update();
+					this.routeNodes = [];
+					this.drawRoutePath([]);
+					this.drawSurvivor();
 					window.Settings.pause();
 				}
 			}, 1000 / fps);
