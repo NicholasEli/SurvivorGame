@@ -1,3 +1,4 @@
+import { movingSprites } from './dictonary.js';
 import Settings from './Settings.js';
 import Canvas from './Canvas.js';
 import Survivor from './Survivor.js';
@@ -18,12 +19,11 @@ window.onload = async function () {
 	image.setAttribute('alt', `survivor idle - 0`);
 	container.append(image);
 
-	const movingSprites = ['0', '45', '90', '135', '180', '225', '270', '315'];
 	movingSprites.forEach((key) => {
 		const image = document.createElement('img');
-		image.id = `move-${key}`;
-		image.src = `./assets/survivor/rifle/move/survivor-move_rifle_${key}.png`;
-		image.setAttribute('alt', `survivor move - ${key}`);
+		image.id = `move-${key.degree}`;
+		image.src = `./assets/survivor/rifle/move/survivor-move_rifle_${key.degree}.png`;
+		image.setAttribute('alt', `survivor move - ${key.degree}`);
 		container.append(image);
 	});
 

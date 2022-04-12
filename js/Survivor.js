@@ -1,3 +1,5 @@
+import { movingSprites } from './dictonary.js';
+
 export default class Survivor {
 	constructor(x = 0, y = 0) {
 		this.width = 50;
@@ -129,6 +131,7 @@ export default class Survivor {
 
 		let theta = Math.atan2(yDiff, xDiff); // range (-PI, PI]
 		theta *= 180 / Math.PI; // rads to degs, range (-180, 180]
+		console.log(theta);
 
 		// if (theta >= 0 && theta < 45) this.sprite = 'move-90';
 		// if (theta >= 45 && theta < 90) this.sprite = 'move-180';
