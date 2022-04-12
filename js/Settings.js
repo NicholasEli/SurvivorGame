@@ -15,9 +15,11 @@ const pauseBtnMarkup = `
 			</svg>`;
 
 export default class Settings {
-	constructor(canvas = null, planning = true) {
+	constructor(canvas = null, playCallback = null, pauseCallback = null) {
 		this.canvas = canvas;
-		this.planning = planning;
+		this.planning = true;
+		this.playCallback = playCallback;
+		this.pauseCallback = pauseCallback;
 	}
 
 	set setPlanningPhase(planning) {
@@ -31,18 +33,20 @@ export default class Settings {
 		playBtn.classList.add('active');
 		playBtn.insertAdjacentHTML('beforeend', playBtnMarkup);
 		playBtn.onclick = () => {
-			this.planning = true;
+			this.planning = false;
 			playBtn.classList.remove('active');
 			pauseBtn.classList.add('active');
+			if (this.playCallback) this.playCallback();
 		};
 
 		const pauseBtn = document.createElement('div');
 		pauseBtn.id = 'play-btn';
 		pauseBtn.insertAdjacentHTML('beforeend', pauseBtnMarkup);
 		pauseBtn.onclick = () => {
-			this.planning = false;
+			this.planning = true;
 			pauseBtn.classList.remove('active');
 			playBtn.classList.add('active');
+			if (this.pauseCallback) this.pauseCallback();
 		};
 
 		document.body.append(playBtn);

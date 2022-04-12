@@ -1,7 +1,6 @@
 export default class Survivor {
-	constructor(canvas, settings, x = 0, y = 0) {
+	constructor(canvas, x = 0, y = 0) {
 		this.canvas = canvas;
-		this.settings = settings;
 		this.width = 50;
 		this.height = 50;
 		this.x = 0;
@@ -21,7 +20,7 @@ export default class Survivor {
 	}
 
 	init() {
-		if (!this.canvas && !this.settings) return;
+		if (!this.canvas) return;
 		this.drawSurvivor();
 		//this.ctx.strokeRect(this.x, this.y, this.width, this.height);
 
@@ -82,8 +81,7 @@ export default class Survivor {
 				clientCoords.x > this.x &&
 				clientCoords.x < this.x + this.width &&
 				clientCoords.y > this.y &&
-				clientCoords.y < this.y + this.height &&
-				this.settings.planning
+				clientCoords.y < this.y + this.height
 			) {
 				console.log('--selecting survivor');
 				routeNodes = [];
@@ -113,17 +111,23 @@ export default class Survivor {
 		};
 
 		this.canvas.el.onmouseup = (e) => {
-			onTarget = false;
 			if (onTarget && routeNodes.length > minNodes) {
 				console.log('--setting route');
 				this.routeNodes = routeNodes;
 			} else {
+				console.log('clear');
 				this.routeNodes = [];
 			}
-
 			this.canvas.clear();
 			_drawPath();
 			this.drawSurvivor();
+			onTarget = false;
 		};
+	}
+
+	moveSurvivor() {
+		if (this.routeNodes && this.routeNodes.length) {
+			console.log('moving');
+		}
 	}
 }

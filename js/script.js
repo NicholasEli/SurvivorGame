@@ -6,11 +6,18 @@ window.onload = function () {
 	console.log('--Server Running');
 
 	const canvas = new Canvas();
+	const survivor = new Survivor(canvas, 10, 10);
+
+	const playCallback = () => {
+		survivor.moveSurvivor();
+	};
+
+	const pauseCallback = () => {
+		console.log(settings);
+	};
+	const settings = new Settings(canvas, playCallback, pauseCallback);
+
 	canvas.init();
-
-	const settings = new Settings(canvas);
 	settings.init();
-
-	const survivor = new Survivor(canvas, settings, 10, 10);
 	survivor.init();
 };
