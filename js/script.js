@@ -33,7 +33,24 @@ window.onload = async function () {
 	// Allow canvas & images to load
 	await timeout(1000);
 
-	const environment = new Environment([{ x: 0, y: 0, width: canvas.width, height: 10 }]);
+	const environment = new Environment([
+		{ x: 0, y: 0, width: canvas.width, height: 10 }, // top
+		{ x: canvas.width - 10, y: 0, width: 10, height: canvas.height }, // right
+		{ x: 0, y: canvas.height - 10, width: canvas.width, height: 10 }, // bottom
+		{ x: 0, y: 0, width: 10, height: canvas.height }, // left
+		// bottom center
+		{ x: canvas.width / 2.5, y: canvas.height - 225, width: 10, height: 225 },
+		{ x: canvas.width - canvas.width / 2.5, y: canvas.height - 225, width: 10, height: 225 },
+		// top center
+		{ x: canvas.width / 2.5, y: 0, width: 10, height: 225 },
+		{ x: canvas.width - canvas.width / 2.5, y: 0, width: 10, height: 225 },
+		// left center
+		{ x: 150, y: canvas.height - 365, width: 165, height: 10 },
+		{ x: 150, y: canvas.height - 225, width: 165, height: 10 },
+		// right center
+		{ x: canvas.width - 300, y: canvas.height - 365, width: 165, height: 10 },
+		{ x: canvas.width - 300, y: canvas.height - 225, width: 165, height: 10 },
+	]);
 	environment.init();
 	window.Canvas.update = () => {
 		environment.init();
