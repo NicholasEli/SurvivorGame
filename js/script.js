@@ -18,7 +18,7 @@ window.onload = async function () {
 	image.setAttribute('alt', `survivor idle - 0`);
 	container.append(image);
 
-	const movingImageCount = 19;
+	const movingImageCount = 20;
 	for (let i = 0; i < movingImageCount; i++) {
 		const image = document.createElement('img');
 		image.id = `move-${i}`;
@@ -33,7 +33,6 @@ window.onload = async function () {
 	const survivor = new Survivor(10, 10);
 
 	const playCallback = () => {
-		console.log();
 		survivor.moveSurvivor();
 	};
 

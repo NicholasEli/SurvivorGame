@@ -2,10 +2,11 @@ export default class Survivor {
 	constructor(x = 0, y = 0) {
 		this.width = 50;
 		this.height = 50;
-		this.x = 0;
-		this.y = 0;
+		this.x = 768 / 2 - 75 / 2;
+		this.y = 250 - 75 / 2;
 		this.width = 75;
 		this.height = 75;
+		this.rotate = 0;
 		this.health = 100;
 		this.sprite = 'idle-0';
 		this.minNodes = 3;
@@ -21,6 +22,11 @@ export default class Survivor {
 
 	drawSurvivor() {
 		const sprite = document.getElementById(this.sprite);
+		const xAxis = this.x + this.width / 2;
+		const yAxis = this.y + this.height / 2;
+		window.Canvas.ctx.translate(xAxis, yAxis);
+		window.Canvas.ctx.rotate(this.rotate);
+		window.Canvas.ctx.translate(xAxis * -1, yAxis * -1);
 		window.Canvas.ctx.drawImage(sprite, this.x, this.y, this.width, this.height);
 		//window.Canvas.ctx.strokeRect(this.x, this.y, this.width, this.height);
 		window.Survivor = this;
@@ -120,15 +126,15 @@ export default class Survivor {
 		if (this.routeNodes && this.routeNodes.length) {
 			let moveSpriteIndex = 0;
 			let nodeIndex = 0;
-			const fps = 20;
+			const fps = 10;
 
 			const _animate = () => {
 				this.x = this.routeNodes[nodeIndex].x - this.width / 2;
 				this.y = this.routeNodes[nodeIndex].y - this.height / 2;
-				if (moveSpriteIndex >= 19) moveSpriteIndex = 0;
+				if (moveSpriteIndex >= 20) moveSpriteIndex = 0;
 				this.sprite = `move-${moveSpriteIndex}`;
 
-				if (this.routeNodes.length - 1 === this.routeNodes.length) {
+				if (this.routeNodes.length - 2 === nodeIndex) {
 					this.sprite = 'idle-0';
 				}
 
