@@ -32,9 +32,13 @@ export default class Survivor {
 
 	drawRoute() {
 		let onTarget = false;
+		let routeNodes = [];
+		let canvasBounds = null;
+		let clientCoords = null;
+
 		this.canvas.el.onmousedown = (e) => {
-			const canvasBounds = this.canvas.el.getBoundingClientRect();
-			const clientCoords = { x: e.clientX - canvasBounds.x, y: e.clientY - canvasBounds.y };
+			canvasBounds = this.canvas.el.getBoundingClientRect();
+			clientCoords = { x: e.clientX - canvasBounds.x, y: e.clientY - canvasBounds.y };
 			if (
 				clientCoords.x > this.x &&
 				clientCoords.x < this.x + this.width &&
@@ -44,20 +48,33 @@ export default class Survivor {
 			) {
 				console.log('--selecting survivor');
 				onTarget = true;
+				routeNodes.push(clientCoords);
 			}
 		};
 
 		this.canvas.el.onmousemove = (e) => {
 			if (onTarget) {
-				console.log('--drawing route');
+				const previousNode = routeNodes[routeNodes.length - 1];
+				clientCoords = { x: e.clientX - canvasBounds.x, y: e.clientY - canvasBounds.y };
+
+				if (
+					parseInt(clientCoords.x - previousNode.x) > 50 ||
+					parseInt(clientCoords.y - previousNode.y) > 50
+				) {
+					console.log('--drawing route');
+					routeNodes.push(clientCoords);
+				}
 			}
 		};
 
 		this.canvas.el.onmouseup = (e) => {
-			if (onTarget) {
+			if (onTarget && routeNodes.length > 1) {
 				console.log('--setting route');
+				console.log(routeNodes);
 			}
 			onTarget = false;
+			routeNodes = [];
+			clientCoords = null;
 		};
 	}
 }
