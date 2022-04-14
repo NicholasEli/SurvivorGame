@@ -32,9 +32,9 @@ window.onload = async function () {
 	survivor.draw();
 
 	let targetingSurvivor = false;
-	let clientCoordinates = null;
+	let routePoints = [];
 	canvas.el.onmousedown = (e) => {
-		clientCoordinates = {
+		const clientCoordinates = {
 			x: e.clientX - canvas.dimensions.x,
 			y: e.clientY - canvas.dimensions.y,
 		};
@@ -45,22 +45,24 @@ window.onload = async function () {
 			clientCoordinates.y > survivor.y &&
 			clientCoordinates.y < survivor.y + survivor.height
 		) {
-			console.log('targetingSurvivor');
+			routePoints = [clientCoordinates];
 			targetingSurvivor = true;
 		}
 	};
 
 	canvas.el.onmousemove = (e) => {
-		if (targetingSurvivor && clientCoordinates) {
-			clientCoordinates = {
+		if (targetingSurvivor) {
+			routePoints.push({
 				x: e.clientX - canvas.dimensions.x,
 				y: e.clientY - canvas.dimensions.y,
-			};
+			});
 		}
 	};
 
 	canvas.el.onmouseup = (e) => {
-		clientCoordinates = null;
 		targetingSurvivor = true;
+		canvas.clear();
+		survivor.route(routePoints);
+		survivor.draw();
 	};
 };
