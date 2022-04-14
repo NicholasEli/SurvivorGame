@@ -1,4 +1,4 @@
-import { movingSprites } from './dictonary.js';
+import { rifle } from './sprites.js';
 import Canvas from './Canvas.js';
 import Survivor from './Survivor.js';
 
@@ -14,23 +14,20 @@ window.onload = async function () {
 
 	timeout(2000);
 
-	const survivorDims = {
-		width: 75,
-		height: 75,
-		image: document.getElementById('survivor'),
-	};
 	const survivor = new Survivor(
 		canvas,
+		// inner dims
 		0,
 		0,
-		survivorDims.width,
-		survivorDims.height,
+		rifle.move.cell.width,
+		rifle.move.cell.height,
+		// outer dims
 		canvas.dimensions.width / 2,
 		canvas.dimensions.height / 2,
-		50,
-		50,
-		survivorDims.image
+		rifle.move.cell.width,
+		rifle.move.cell.height,
+		document.getElementById('survivor')
 	);
-	console.log(survivor);
+
 	survivor.draw();
 };
