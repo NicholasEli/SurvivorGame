@@ -38,6 +38,8 @@ export default class Image {
 
 	draw() {
 		this.canvas.ctx.beginPath();
+		// this.canvas.ctx.strokeStyle = 'blue';
+		// this.canvas.ctx.strokeRect(this.x, this.y, this.width, this.height);
 		if (this.sx === null || this.sy === null || !this.sWidth === null || !this.sHeight === null) {
 			this.canvas.ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
 		} else {
