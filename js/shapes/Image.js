@@ -11,7 +11,7 @@
  * @param { int } height - height of rectangle
  * @param { string } color - color of rectangle
  **/
-export default class Rectangle {
+export default class Image {
 	constructor(
 		canvas,
 		sx = null,

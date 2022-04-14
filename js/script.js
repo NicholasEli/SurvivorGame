@@ -12,21 +12,25 @@ window.onload = async function () {
 	const canvas = new Canvas();
 	canvas.init();
 
+	timeout(2000);
+
 	const survivorDims = {
 		width: 75,
 		height: 75,
+		image: document.getElementById('survivor'),
 	};
 	const survivor = new Survivor(
 		canvas,
-		character.width / 2 - 50,
-		character.height / 2 - 50,
-		character.width / 4.3,
-		character.height / 4.3,
+		0,
+		0,
+		survivorDims.width,
+		survivorDims.height,
 		canvas.dimensions.width / 2,
-		canvas.dimensions.height / 2 + 50,
+		canvas.dimensions.height / 2,
 		50,
 		50,
-		character.el
+		survivorDims.image
 	);
+	console.log(survivor);
 	survivor.draw();
 };

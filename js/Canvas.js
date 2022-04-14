@@ -10,10 +10,9 @@ export default class Canvas {
 	}
 
 	init() {
-		const canvas = document.createElement('canvas');
+		const canvas = document.getElementById('canvas');
 		const dimensions = canvas.getBoundingClientRect();
 		const ctx = canvas.getContext('2d');
-
 		this.el = canvas;
 		this.dimensions = dimensions;
 		this.ctx = ctx;
