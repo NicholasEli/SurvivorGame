@@ -14,5 +14,10 @@ export default class Survivor extends Image {
 		image
 	) {
 		super(canvas, sx, sy, sWidth, sHeight, x, y, width, height, image);
+
+		this.orientation = {
+			x: this.x + this.width / 2,
+			y: 0,
+		};
 	}
 }
