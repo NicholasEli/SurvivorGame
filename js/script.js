@@ -34,7 +34,20 @@ window.onload = async function () {
 	let targetingSurvivor = false;
 	let clientCoordinates = null;
 	canvas.el.onmousedown = (e) => {
-		clientCoordinates = { x: e.clientX - canvas.dimensions.x, y: e.clientY - canvas.dimensions.y };
+		clientCoordinates = {
+			x: e.clientX - canvas.dimensions.x,
+			y: e.clientY - canvas.dimensions.y,
+		};
+
+		if (
+			clientCoordinates.x > survivor.x &&
+			clientCoordinates.x < survivor.x + survivor.width &&
+			clientCoordinates.y > survivor.y &&
+			clientCoordinates.y < survivor.y + survivor.height
+		) {
+			console.log('targetingSurvivor');
+			targetingSurvivor = true;
+		}
 	};
 
 	canvas.el.onmousemove = (e) => {
@@ -47,6 +60,7 @@ window.onload = async function () {
 	};
 
 	canvas.el.onmouseup = (e) => {
+		clientCoordinates = null;
 		targetingSurvivor = true;
 	};
 };
