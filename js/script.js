@@ -30,4 +30,23 @@ window.onload = async function () {
 	);
 
 	survivor.draw();
+
+	let targetingSurvivor = false;
+	let clientCoordinates = null;
+	canvas.el.onmousedown = (e) => {
+		clientCoordinates = { x: e.clientX - canvas.dimensions.x, y: e.clientY - canvas.dimensions.y };
+	};
+
+	canvas.el.onmousemove = (e) => {
+		if (targetingSurvivor && clientCoordinates) {
+			clientCoordinates = {
+				x: e.clientX - canvas.dimensions.x,
+				y: e.clientY - canvas.dimensions.y,
+			};
+		}
+	};
+
+	canvas.el.onmouseup = (e) => {
+		targetingSurvivor = true;
+	};
 };
