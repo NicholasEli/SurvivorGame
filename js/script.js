@@ -94,7 +94,7 @@ window.onload = async function () {
 		pauseBtn.classList.add('active');
 		playing = true;
 		const _degree = degree(point1.x, point1.y, point2.x, point2.y);
-		console.log(_degree);
+		survivor.o = _degree;
 		const _direction = direction(point1.x, point1.y, point2.x, point2.y);
 		let index = 1;
 		const _animate = () => {

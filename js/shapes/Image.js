@@ -22,7 +22,8 @@ export default class Image {
 		y,
 		width,
 		height,
-		image
+		image,
+		o = 0
 	) {
 		this.canvas = canvas;
 		this.sx = sx;
@@ -34,12 +35,19 @@ export default class Image {
 		this.width = width;
 		this.height = height;
 		this.image = image;
+		this.o = o;
 	}
 
 	draw() {
+		const xAxis = this.x + this.width / 2;
+		const yAxis = this.y + this.height / 2;
+		this.canvas.ctx.save();
 		this.canvas.ctx.beginPath();
 		// this.canvas.ctx.strokeStyle = 'blue';
 		// this.canvas.ctx.strokeRect(this.x, this.y, this.width, this.height);
+		this.canvas.ctx.translate(xAxis, yAxis);
+		this.canvas.ctx.rotate(this.o);
+		this.canvas.ctx.translate(xAxis * -1, yAxis * -1);
 		if (this.sx === null || this.sy === null || !this.sWidth === null || !this.sHeight === null) {
 			this.canvas.ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
 		} else {
@@ -56,6 +64,7 @@ export default class Image {
 			);
 		}
 		this.canvas.ctx.closePath();
+		this.canvas.ctx.restore();
 	}
 
 	update() {
