@@ -39,6 +39,7 @@ export default class Image {
 	}
 
 	draw() {
+		const rotation = 0.16 * this.o;
 		const xAxis = this.x + this.width / 2;
 		const yAxis = this.y + this.height / 2;
 		this.canvas.ctx.save();
@@ -46,7 +47,7 @@ export default class Image {
 		// this.canvas.ctx.strokeStyle = 'blue';
 		// this.canvas.ctx.strokeRect(this.x, this.y, this.width, this.height);
 		this.canvas.ctx.translate(xAxis, yAxis);
-		this.canvas.ctx.rotate(this.o);
+		this.canvas.ctx.rotate(rotation);
 		this.canvas.ctx.translate(xAxis * -1, yAxis * -1);
 		if (this.sx === null || this.sy === null || !this.sWidth === null || !this.sHeight === null) {
 			this.canvas.ctx.drawImage(this.image, this.x, this.y, this.width, this.height);

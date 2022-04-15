@@ -13,8 +13,6 @@ window.onload = async function () {
 	const canvas = new Canvas();
 	canvas.init();
 
-	timeout(2000);
-
 	const survivor = new Survivor(
 		canvas,
 		// inner dims
@@ -93,8 +91,10 @@ window.onload = async function () {
 		playBtn.classList.remove('active');
 		pauseBtn.classList.add('active');
 		playing = true;
-		const _degree = degree(point1.x, point1.y, point2.x, point2.y);
+		const _degree = degree(point1.x, point1.y, point2.x, point2.y, false);
 		survivor.o = _degree;
+		console.clear();
+		console.log(_degree);
 		const _direction = direction(point1.x, point1.y, point2.x, point2.y);
 		let index = 1;
 		const _animate = () => {
