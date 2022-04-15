@@ -40,10 +40,9 @@ export function degree(x1, x2, y1, y2) {
  * @return { float } distance between the center of two objects
  **/
 export function distance(x1, y1, x2, y2) {
-  const xDist = x2 - x1;
-  const yDist = y2 - y1;
+  const _slope = slope(x1, x2, y1, y2);
 
-  return Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2));
+  return Math.sqrt(Math.pow(_slope.x, 2) + Math.pow(_slope.y, 2));
 }
 
 /**
@@ -78,22 +77,4 @@ export function collision(distance, r1, r2) {
   }
 
   return false;
-}
-
-/**
- * Animate elements on a loop
- * @param { class } canvas - Canvas class
- * @param { function } callback - returns true false value to keep animating
- * @param { boolean } stop - tells animation when to stop running
- **/
-export function animate(canvas, callback, stop = false) {
-  if (!canvas || !callback) return;
-
-  const { ctx, dimensions } = canvas;
-
-  if (stop === false) requestAnimationFrame(() => animate(canvas, callback, stop));
-
-  ctx.clearRect(0, 0, dimensions.width, dimensions.height);
-
-  stop = callback();
 }
