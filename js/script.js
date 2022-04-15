@@ -49,11 +49,10 @@ window.onload = async function () {
 			if (point1 && point2) {
 				point1 = null;
 				point2 = null;
-				return;
 			}
 			if (!point1) {
 				targetingSurvivor = true;
-				point1 = clientCoordinates;
+				point1 = { x: survivor.x + survivor.width / 2, y: survivor.y + survivor.height / 2 };
 			}
 		}
 	};
@@ -77,8 +76,6 @@ window.onload = async function () {
 			survivor.route(point1, point2);
 			survivor.draw();
 		}
-		point1 = null;
-		point2 = null;
 		targetingSurvivor = false;
 	};
 
@@ -86,13 +83,12 @@ window.onload = async function () {
 	const pauseBtn = document.getElementById('pause-btn');
 
 	let playing = false;
-	let routeIndex = 0;
 	playBtn.onclick = () => {
 		playBtn.classList.remove('active');
 		pauseBtn.classList.add('active');
 		playing = true;
 		const _animate = () => {
-			if (playing && !routePoints[routeIndex]) {
+			if (playing) {
 				pauseBtn.click();
 				playing = false;
 				routeIndex = 0;
