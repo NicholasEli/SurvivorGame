@@ -20,15 +20,12 @@ export function slope(x1, x2, y1, y2) {
  * @param { int } y2 - y coordinate of object 2
  * @return { float } degree from point A and point B
  **/
-export function degree(x1, x2, y1, y2) {
-  const x = x2 - x1;
-  const y = y2 - y1;
-  const radians = Math.atan2(y, x);
+export function degree(x1, y1, x2, y2) {
+  let deltaX = x1 - x2;
+  let deltaY = y1 - y2;
+  let radians = Math.atan2(deltaY, deltaX);
   let degrees = (radians * 180) / Math.PI - 90;
-  while (degrees >= 360) degrees -= 360;
-  while (degrees < 0) degrees += 360;
-
-  return degrees;
+  return (degrees = (degrees + 360) % 360);
 }
 
 /**

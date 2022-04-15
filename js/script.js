@@ -1,5 +1,5 @@
 import { rifle } from './sprites.js';
-import { slope, direction } from './utils.js';
+import { slope, direction, distance, degree } from './utils.js';
 import Canvas from './Canvas.js';
 import Survivor from './Survivor.js';
 
@@ -78,7 +78,6 @@ window.onload = async function () {
 				y: e.clientY - canvas.dimensions.y,
 			};
 			point2 = clientCoordinates;
-
 			canvas.clear();
 			survivor.route(point1, point2);
 			survivor.draw();
@@ -94,9 +93,9 @@ window.onload = async function () {
 		playBtn.classList.remove('active');
 		pauseBtn.classList.add('active');
 		playing = true;
-
+		const _degree = degree(point1.x, point1.y, point2.x, point2.y);
+		console.log(_degree);
 		const _direction = direction(point1.x, point1.y, point2.x, point2.y);
-		console.log(_direction);
 		let index = 1;
 		const _animate = () => {
 			survivor.x = survivor.x + _direction.x;
@@ -106,7 +105,7 @@ window.onload = async function () {
 			survivor.draw();
 			index++;
 
-			requestAnimationFrame(() => _animate());
+			setTimeout(() => requestAnimationFrame(() => _animate()), 200);
 		};
 
 		if (point1 && point2) _animate();
