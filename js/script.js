@@ -71,6 +71,7 @@ window.onload = async function () {
 	};
 
 	canvas.el.onmouseup = (e) => {
+		console.log(point1, point2);
 		if (point1 && point2 && targetingSurvivor) {
 			canvas.clear();
 			survivor.route(point1, point2);
@@ -88,25 +89,10 @@ window.onload = async function () {
 		pauseBtn.classList.add('active');
 		playing = true;
 		const _animate = () => {
-			if (playing) {
-				pauseBtn.click();
-				playing = false;
-				routeIndex = 0;
-				routePoints = [];
-				return;
-			}
-
-			canvas.clear();
-			survivor.route(routePoints);
-			survivor.x = routePoints[routeIndex].x;
-			survivor.y = routePoints[routeIndex].y;
-			survivor.draw();
-			routeIndex++;
-
 			requestAnimationFrame(() => _animate());
 		};
 
-		_animate();
+		if (point1 && point2) _animate();
 	};
 
 	pauseBtn.onclick = () => {

@@ -1,4 +1,23 @@
 /**
+ * Calcs degree between  two points
+ * @param { int } x1 - x coordinate of object 1
+ * @param { int } y1 - y coordinate of object 1
+ * @param { int } x2 - x coordinate of object 2
+ * @param { int } y2 - y coordinate of object 2
+ * @return { float } degree from point A and point B
+ **/
+export function degree(x1, x2, y1, y2) {
+  const x = x2 - x1;
+  const y = y2 - y1;
+  const radians = Math.atan2(y, x);
+  let degrees = (radians * 180) / Math.PI - 90;
+  while (degrees >= 360) degrees -= 360;
+  while (degrees < 0) degrees += 360;
+
+  return degrees;
+}
+
+/**
  * Calcs distance between the center of two points
  * @param { int } x1 - x coordinate of object 1
  * @param { int } y1 - y coordinate of object 1
