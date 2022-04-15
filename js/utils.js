@@ -1,4 +1,18 @@
 /**
+ * Calcs slope between  two points
+ * @param { int } x1 - x coordinate of object 1
+ * @param { int } y1 - y coordinate of object 1
+ * @param { int } x2 - x coordinate of object 2
+ * @param { int } y2 - y coordinate of object 2
+ * @return { object } rise, run and slope
+ **/
+export function slope(x1, x2, y1, y2) {
+  const x = x2 - x1;
+  const y = y2 - y1;
+  return { x, y, slope: y / x };
+}
+
+/**
  * Calcs degree between  two points
  * @param { int } x1 - x coordinate of object 1
  * @param { int } y1 - y coordinate of object 1
@@ -30,6 +44,25 @@ export function distance(x1, y1, x2, y2) {
   const yDist = y2 - y1;
 
   return Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2));
+}
+
+/**
+ * Calcs direction between two points
+ * @param { int } x1 - x coordinate of object 1
+ * @param { int } y1 - y coordinate of object 1
+ * @param { int } x2 - x coordinate of object 2
+ * @param { int } y2 - y coordinate of object 2
+ * @return { object } direction of travel angle for x & y cooridnates
+ **/
+export function direction(x1, y1, x2, y2) {
+  const _slope = slope(x1, y1, x2, y2);
+  const angle = Math.atan2(_slope.y, _slope.x);
+  const velocity = {
+    x: Math.cos(angle),
+    y: Math.sin(angle),
+  };
+
+  return velocity;
 }
 
 /**
