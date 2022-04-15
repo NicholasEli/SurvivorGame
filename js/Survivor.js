@@ -24,8 +24,16 @@ export default class Survivor extends Image {
 	route(point1, point2) {
 		if (!point1) return;
 		this.canvas.ctx.beginPath();
-		if (point1) this.canvas.ctx.moveTo(point1.x, point1.y);
+
+		if (point1) {
+			this.canvas.ctx.fillStyle = '#39ff14';
+			this.canvas.ctx.beginPath();
+			this.canvas.ctx.arc(point1.x, point1.y, 5, 0, 2 * Math.PI);
+			this.canvas.ctx.fill();
+			this.canvas.ctx.moveTo(point1.x, point1.y);
+		}
 		if (point2) this.canvas.ctx.lineTo(point2.x, point2.y);
+
 		this.canvas.ctx.lineWidth = 3;
 		this.canvas.ctx.setLineDash([5, 15]);
 		this.canvas.ctx.strokeStyle = '#39ff14';
