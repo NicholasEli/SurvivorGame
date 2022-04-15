@@ -106,7 +106,7 @@ window.onload = async function () {
 			survivor.draw();
 			index++;
 
-			setTimeout(() => requestAnimationFrame(() => _animate()), 200);
+			requestAnimationFrame(() => _animate());
 		};
 
 		if (point1 && point2) _animate();

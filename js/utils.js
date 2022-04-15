@@ -9,7 +9,7 @@
 export function slope(x1, x2, y1, y2) {
   const x = x2 - x1;
   const y = y2 - y1;
-  return { x, y, slope: y / x };
+  return { x, y, s: y / x };
 }
 
 /**
@@ -55,7 +55,7 @@ export function distance(x1, y1, x2, y2) {
  * @return { object } direction of travel angle for x & y cooridnates
  **/
 export function direction(x1, y1, x2, y2) {
-  const _slope = slope(x1, y1, x2, y2);
+  const _slope = slope(x1, x2, y1, y2);
   const angle = Math.atan2(_slope.y, _slope.x);
   const velocity = {
     x: Math.cos(angle),
