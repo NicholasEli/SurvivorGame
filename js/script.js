@@ -56,13 +56,56 @@ window.onload = async function () {
 				x: e.clientX - canvas.dimensions.x,
 				y: e.clientY - canvas.dimensions.y,
 			});
+
+			canvas.clear();
+			survivor.route(routePoints);
+			survivor.draw();
 		}
 	};
 
 	canvas.el.onmouseup = (e) => {
-		targetingSurvivor = true;
+		targetingSurvivor = false;
 		canvas.clear();
 		survivor.route(routePoints);
+		survivor.draw();
+	};
+
+	const playBtn = document.getElementById('play-btn');
+	const pauseBtn = document.getElementById('pause-btn');
+
+	let playing = false;
+	let routeIndex = 0;
+	playBtn.onclick = () => {
+		playBtn.classList.remove('active');
+		pauseBtn.classList.add('active');
+		playing = true;
+		const _animate = () => {
+			if (playing && !routePoints[routeIndex]) {
+				pauseBtn.click();
+				playing = false;
+				routeIndex = 0;
+				routePoints = [];
+				return;
+			}
+
+			canvas.clear();
+			survivor.route(routePoints);
+			survivor.x = routePoints[routeIndex].x;
+			survivor.y = routePoints[routeIndex].y;
+			survivor.draw();
+			routeIndex++;
+
+			requestAnimationFrame(() => _animate());
+		};
+
+		_animate();
+	};
+
+	pauseBtn.onclick = () => {
+		pauseBtn.classList.remove('active');
+		playBtn.classList.add('active');
+		playing = false;
+		canvas.clear();
 		survivor.draw();
 	};
 };

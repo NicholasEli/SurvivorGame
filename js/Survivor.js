@@ -19,12 +19,11 @@ export default class Survivor extends Image {
 			x: this.x + this.width / 2,
 			y: 0,
 		};
-
-		this.routePoints = [];
 	}
 
 	route(points) {
-		if (!points || (points && !points.length)) this.canvas.ctx.beginPath();
+		if (!points || (points && !points.length)) return;
+		this.canvas.ctx.beginPath();
 		this.canvas.ctx.moveTo(points[0].x, points[0].y);
 		points.forEach((point, index) => {
 			if (!point || !points[index + 1]) return;
