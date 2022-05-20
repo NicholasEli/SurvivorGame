@@ -1,5 +1,5 @@
 import { rifle } from './sprites.js';
-import { slope, direction, distance, degree, rotation } from './utils.js';
+import { direction, degree, rotation } from './utils.js';
 import Canvas from './Canvas.js';
 import Survivor from './Survivor.js';
 
@@ -29,6 +29,8 @@ window.onload = async function () {
 	);
 
 	survivor.draw();
+
+	console.log('start', survivor.x, survivor.y);
 
 	let targetingSurvivor = false;
 	let point1 = null;
@@ -87,6 +89,19 @@ window.onload = async function () {
 	const pauseBtn = document.getElementById('pause-btn');
 
 	let playing = false;
+	let moveTimer = null;
+	let index = 1;
+
+	const _stopAnimatingSurvivor = () => {
+		playing = false;
+		moveTimer = null;
+		clearTimeout(moveTimer);
+		moveTimer = null;
+		playBtn.classList.add('active');
+		pauseBtn.classList.remove('active');
+		index = 1;
+	};
+
 	playBtn.onclick = () => {
 		playBtn.classList.remove('active');
 		pauseBtn.classList.add('active');
@@ -94,7 +109,7 @@ window.onload = async function () {
 		const _degree = degree(point1.x, point1.y, point2.x, point2.y, true);
 		survivor.rotation = rotation(_degree);
 		const _direction = direction(point1.x, point1.y, point2.x, point2.y);
-		let index = 1;
+
 		const _animate = () => {
 			survivor.x = survivor.x + _direction.x;
 			survivor.y = survivor.y + _direction.y;
@@ -102,6 +117,10 @@ window.onload = async function () {
 			survivor.route(point1, point2);
 			survivor.draw();
 			index++;
+			// if (index >= 20) {
+			// 	_stopAnimatingSurvivor();
+			// 	return;
+			// }
 
 			setTimeout(() => requestAnimationFrame(() => _animate()), 25);
 		};

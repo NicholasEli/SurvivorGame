@@ -73,7 +73,7 @@ export function direction(x1, y1, x2, y2) {
 }
 
 /**
- * Determines if two objects have collided at their borders
+ * Determines if two circular objects have collided at their borders
  * @param { float } disatnce - distance between the center of two objects
  * @param { int } r1 - radius ( or area ) of object 1
  * @param { int } x2 - radius ( or area ) of object 2
