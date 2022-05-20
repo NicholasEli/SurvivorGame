@@ -23,7 +23,7 @@ export default class Image {
 		width,
 		height,
 		image,
-		o = 0
+		rotation = 0
 	) {
 		this.canvas = canvas;
 		this.sx = sx;
@@ -35,17 +35,18 @@ export default class Image {
 		this.width = width;
 		this.height = height;
 		this.image = image;
-		this.o = o;
+		this.rotation = rotation;
 	}
 
 	draw() {
-		const rotation = 0.16 * this.o;
+		const rotation = 0.016 * this.rotation;
+		console.log(rotation);
 		const xAxis = this.x + this.width / 2;
 		const yAxis = this.y + this.height / 2;
 		this.canvas.ctx.save();
 		this.canvas.ctx.beginPath();
-		// this.canvas.ctx.strokeStyle = 'blue';
-		// this.canvas.ctx.strokeRect(this.x, this.y, this.width, this.height);
+		this.canvas.ctx.strokeStyle = 'blue';
+		this.canvas.ctx.strokeRect(this.x, this.y, this.width, this.height);
 		this.canvas.ctx.translate(xAxis, yAxis);
 		this.canvas.ctx.rotate(rotation);
 		this.canvas.ctx.translate(xAxis * -1, yAxis * -1);
