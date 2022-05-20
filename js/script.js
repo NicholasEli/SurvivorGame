@@ -1,5 +1,5 @@
 import { rifle } from './sprites.js';
-import { direction, degree, rotation } from './utils.js';
+import { direction, degree, rotation, characterCollision } from './utils.js';
 import Canvas from './Canvas.js';
 import Survivor from './Survivor.js';
 
@@ -29,8 +29,6 @@ window.onload = async function () {
 	);
 
 	survivor.draw();
-
-	console.log('start', survivor.x, survivor.y);
 
 	let targetingSurvivor = false;
 	let point1 = null;
@@ -78,6 +76,7 @@ window.onload = async function () {
 				y: e.clientY - canvas.dimensions.y,
 			};
 			point2 = clientCoordinates;
+			console.log(point2);
 			canvas.clear();
 			survivor.route(point1, point2);
 			survivor.draw();
@@ -117,10 +116,13 @@ window.onload = async function () {
 			survivor.route(point1, point2);
 			survivor.draw();
 			index++;
-			// if (index >= 20) {
-			// 	_stopAnimatingSurvivor();
-			// 	return;
-			// }
+
+			const collision = characterCollision(survivor, point2);
+
+			if (collision) {
+				_stopAnimatingSurvivor();
+				return;
+			}
 
 			setTimeout(() => requestAnimationFrame(() => _animate()), 25);
 		};

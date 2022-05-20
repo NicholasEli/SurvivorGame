@@ -73,14 +73,45 @@ export function direction(x1, y1, x2, y2) {
 }
 
 /**
- * Determines if two circular objects have collided at their borders
+ * Determines if two arc objects have collided at their borders
  * @param { float } disatnce - distance between the center of two objects
  * @param { int } r1 - radius ( or area ) of object 1
  * @param { int } x2 - radius ( or area ) of object 2
  * @return { boolean } true or false based on if items have collided
  **/
-export function collision(distance, r1, r2) {
+export function arcCollision(distance, r1, r2) {
   if (distance < r1 + r2) {
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * Determines if rect character has reached destination
+ * @param { object } character - rect object - "character"
+ * @param { object } endpont - x and y coordinates
+ * @return { boolean } true or false if character reached destination
+ **/
+export function characterCollision(character, endPoint, buffer = 5) {
+  const center = {
+    x: character.x + character.width / 2,
+    y: character.y + character.height / 2,
+  };
+
+  const bounds = {
+    left: endPoint.x - buffer,
+    right: endPoint.x + buffer * 2,
+    top: endPoint.y - buffer,
+    bottom: endPoint.y + buffer * 2,
+  };
+
+  if (
+    center.x >= bounds.left &&
+    center.x <= bounds.right &&
+    center.y >= bounds.top &&
+    center.y <= bounds.bottom
+  ) {
     return true;
   }
 
