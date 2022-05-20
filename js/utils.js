@@ -31,6 +31,15 @@ export function degree(x1, y1, x2, y2, is360 = false) {
 }
 
 /**
+ * Set canvas rotation based on 360 degree circumference
+ * @param { degree } 360 calcuation
+ * @return { float } canvas related rotation to circumference
+ **/
+export function rotation(degree) {
+  return 0.016 * degree;
+}
+
+/**
  * Calcs distance between the center of two points
  * @param { int } x1 - x coordinate of object 1
  * @param { int } y1 - y coordinate of object 1
