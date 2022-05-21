@@ -75,10 +75,6 @@ export function setInnerWalls(canvas) {
 		},
 		// center - top - left
 		{ x: 0, y: _height, width: _width1, height: thickness, color, instance: null },
-		// center - top - right
-		{ x: _x2, y: _height, width: _width1, height: thickness, color, instance: null },
-		// center - bottom - left
-		{ x: _x1 - _width1, y: _y, width: _width1, height: thickness, color, instance: null },
 		// center - bottom - right
 		{ x: width - _width1, y: _y, width: _width1, height: thickness, color, instance: null },
 	];
