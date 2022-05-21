@@ -76,7 +76,6 @@ window.onload = async function () {
 				y: e.clientY - canvas.dimensions.y,
 			};
 			point2 = clientCoordinates;
-			console.log(point2);
 			canvas.clear();
 			survivor.route(point1, point2);
 			survivor.draw();
@@ -89,7 +88,6 @@ window.onload = async function () {
 
 	let playing = false;
 	let moveTimer = null;
-	let index = 1;
 
 	const _stopAnimatingSurvivor = () => {
 		playing = false;
@@ -98,7 +96,6 @@ window.onload = async function () {
 		moveTimer = null;
 		playBtn.classList.add('active');
 		pauseBtn.classList.remove('active');
-		index = 1;
 	};
 
 	playBtn.onclick = () => {
@@ -115,12 +112,13 @@ window.onload = async function () {
 			canvas.clear();
 			survivor.route(point1, point2);
 			survivor.draw();
-			index++;
 
 			const collision = characterCollision(survivor, point2);
 
 			if (collision) {
 				_stopAnimatingSurvivor();
+				canvas.clear();
+				survivor.draw();
 				return;
 			}
 
