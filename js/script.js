@@ -99,9 +99,9 @@ window.onload = async function () {
 	};
 
 	playBtn.onclick = () => {
+		playing = true;
 		playBtn.classList.remove('active');
 		pauseBtn.classList.add('active');
-		playing = true;
 		const _degree = degree(point1.x, point1.y, point2.x, point2.y, true);
 		survivor.rotation = rotation(_degree);
 		const _direction = direction(point1.x, point1.y, point2.x, point2.y);
@@ -122,7 +122,13 @@ window.onload = async function () {
 				return;
 			}
 
-			setTimeout(() => requestAnimationFrame(() => _animate()), 25);
+			setTimeout(
+				() =>
+					requestAnimationFrame(() => {
+						if (playing) _animate();
+					}),
+				25
+			);
 		};
 
 		if (point1 && point2) _animate();
@@ -132,7 +138,5 @@ window.onload = async function () {
 		pauseBtn.classList.remove('active');
 		playBtn.classList.add('active');
 		playing = false;
-		canvas.clear();
-		survivor.draw();
 	};
 };
