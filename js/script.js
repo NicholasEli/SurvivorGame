@@ -2,6 +2,7 @@ import { rifle } from './sprites.js';
 import { direction, degree, rotation, characterCollision } from './utils.js';
 import Canvas from './Canvas.js';
 import Survivor from './Survivor.js';
+import { setInnerWalls, setOuterWalls } from './environment.js';
 
 function timeout(ms) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
@@ -12,6 +13,13 @@ window.onload = async function () {
 
 	const canvas = new Canvas();
 	canvas.init();
+
+	const outerWalls = setOuterWalls(canvas);
+	const innerWalls = setInnerWalls(canvas);
+	const _drawWalls = () => {
+		outerWalls.forEach((wall) => wall.instance.draw());
+		innerWalls.forEach((wall) => wall.instance.draw());
+	};
 
 	const survivor = new Survivor(
 		canvas,
@@ -64,6 +72,7 @@ window.onload = async function () {
 			};
 			point2 = clientCoordinates;
 			canvas.clear();
+			_drawWalls();
 			survivor.route(point1, point2);
 			survivor.draw();
 		}
@@ -77,6 +86,7 @@ window.onload = async function () {
 			};
 			point2 = clientCoordinates;
 			canvas.clear();
+			_drawWalls();
 			survivor.route(point1, point2);
 			survivor.draw();
 		}
@@ -110,6 +120,7 @@ window.onload = async function () {
 			survivor.x = survivor.x + _direction.x;
 			survivor.y = survivor.y + _direction.y;
 			canvas.clear();
+			_drawWalls();
 			survivor.route(point1, point2);
 			survivor.draw();
 
@@ -118,6 +129,7 @@ window.onload = async function () {
 			if (collision) {
 				_stopAnimatingSurvivor();
 				canvas.clear();
+				_drawWalls();
 				survivor.draw();
 				return;
 			}
